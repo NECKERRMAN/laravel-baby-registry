@@ -10,11 +10,11 @@
 <body>
     <div class="container">
         <div class="row py-5">
-            @foreach ($articles as $article)
+            @foreach ($product_arr as $article)
             <div class="col-sm-4 col-md-3 col-lg-2">
                 <article>
-                    <h5>{{ $article->name }}</h5>
-                    <img src="{{ $article->img_src}}" alt="m" class="img-fluid">
+                    <h5>{{ $article->title }}</h5>
+                    <img src="{{ $article->img_src }}" alt="m" class="img-fluid">
                 </article>
                     
             </div>

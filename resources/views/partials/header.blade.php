@@ -1,20 +1,19 @@
-<header class="bg-white border-b-2 border-gray-100">
+<header class="px-4">
     <div class="flex flex-row justify-between max-w-screen-xl m-auto mt-5 mb-5 items-center">
       <nav>
         <ul class="flex" data-dropdown-menu="tckp8q-dropdown-menu" role="menubar">
           @guest
           <li class="{{ (request()->is('/')) ? 'active' : ''}}" role="menuitem"><a href="/">Home</a></li>
-          <li class="ml-4 {{ (request()->is('contact')) ? 'active' : ''}}" role="menuitem"><a href="/contact">Contact</a></li>
           @endguest
           @auth
           <li class="ml-4 {{ (request()->is('/*')) ? 'active' : ''}}" role="menuitem"><a href="/">Home</a></li>
-          <li class="ml-4 {{ (request()->is('contact')) ? 'active' : ''}}" role="menuitem"><a href="/contact">Contact</a></li>
-          <li class="ml-4 {{ (request()->is('klanten/*')) || (request()->is('klanten')) ? 'active' : ''}}" role="menuitem"><a href="/klanten">Klanten</a></li>
-          <li class="ml-4 {{ (request()->is('reservaties')) || (request()->is('reservatie/*')) ? 'active' : ''}}" role="menuitem"><a href="/reservaties">Reservaties</a></li>
           @endauth
         </ul>
       </nav>
-      <h1>Storksie</h1>
+      <div class="flex flex-col items-center mb-4">
+        <img src="/images/storksie-logo.png" alt="storksie-logo" class="w-20 h-20">
+        <h1>Storksie</h1>
+    </div>
       @if (Route::has('login'))
       <div class="">
           @auth

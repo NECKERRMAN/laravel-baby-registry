@@ -49,6 +49,7 @@
                     <td>
                         <form method="POST" action="{{ route('scrape.articles') }}">
                             @csrf
+                            <input type="hidden" name="category_id" value="{{ $category->id }}">
                             <input type="hidden" name="url" value="{{ $category->url}}">
                             <input type="hidden" name="shop" value="{{ $category->store_name }}">
                             <button type="submit" class="btn btn-warning">Scrape all articles</button>

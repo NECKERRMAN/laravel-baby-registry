@@ -15,9 +15,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//Route::get('/', [PageController::class, 'index'])->name('home');
+Route::get('/', [PageController::class, 'index'])->name('home');
+Route::get('/articles', [PageController::class, 'articles'])->name('articles');
 
-Route::get('/', [scrapeController::class, 'show']);
+Route::get('/admin/scrape', [scrapeController::class, 'show']);
 Route::post('/scrape/categories', [scrapeController::class, 'scrapeCategories'])->name('scrape.categories');
 Route::post('/scrape/articles', [scrapeController::class, 'scrapeArticles'])->name('scrape.articles');
 

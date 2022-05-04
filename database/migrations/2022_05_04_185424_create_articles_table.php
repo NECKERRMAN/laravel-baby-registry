@@ -16,8 +16,12 @@ return new class extends Migration
         Schema::create('articles', function (Blueprint $table) {
             $table->id();
             $table->foreignId('category_id')->constrained();
+            $table->foreignId('store_id')->constrained();
             $table->string('title');
+            $table->string('product_code');
+            $table->string('img_src');
             $table->string('slug');
+            $table->text('description');
             $table->float('price');
             $table->timestamp('scraped_on')->useCurrent();
             $table->timestamps();

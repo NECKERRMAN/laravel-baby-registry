@@ -10,7 +10,7 @@
     <meta class="foundation-mq">
 </head>
 
-<body>
+<body class="bg-green-100">
     @include('partials.header')
 
     <main class="max-w-screen-xl m-auto mt-5 mb-5">

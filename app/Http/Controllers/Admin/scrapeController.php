@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Article;
 use App\Models\Category;
 use Goutte\Client;
 use Illuminate\Http\Request;
@@ -18,7 +19,7 @@ class scrapeController extends Controller
 
         $allCategories = Category::all();
 
-        return view('scrape-form', compact('shops', 'allCategories'));
+        return view('scrape.scrape-form', compact('shops', 'allCategories'));
     }
 
     public function scrapeCategories(Request $req){
@@ -34,13 +35,12 @@ class scrapeController extends Controller
     }
 
     public function scrapeArticles(Request $req){
-        //dd($req->all());
         switch($req->shop){
             case 'dreambaby':
                 return $this->scrapeDreambabyArticles($req->url);
                 break;
             case 'ikea':
-                $this->scrapeIkeaArticles($req->url);
+                $this->scrapeIkeaArticles($req);
                 break;
         }
     }
@@ -87,12 +87,12 @@ class scrapeController extends Controller
             if(!$crawler) break;
             $articles = array_merge($articles, $this->scrapeFlamingoPageData($crawler));
         }
-
-        return view('scrape-result', compact('articles'));
+        dd($articles);
+        return view('scrape.scrape-result', compact('articles'));
     }
 
     private function scrapeDreamBabyData($crawler){
-        $test = $crawler->filter('.product')->each(function($node){
+       return $crawler->filter('.product')->each(function($node){
             $article = new stdClass();
             $article->title = $node->filter('.product_info a .product_name')->text();
             $article->url = $node->filter('.product_info a')->attr('href');
@@ -100,8 +100,6 @@ class scrapeController extends Controller
             $article->image = $node->filter('.product_info a .product_image .image img')->attr('src');
             return $article;
         });
-        dd($test);
-        return $test;
     }
 
     private function getNextFlaminogPage( $crawler ){
@@ -148,12 +146,14 @@ class scrapeController extends Controller
 
 
             $categoryEntity->save();
-        }    
+        }
+        return view('scrape-form');
+
     }
 
-    private function scrapeIkeaArticles($url){
+    private function scrapeIkeaArticles($req){
         $client = new Client();
-        $crawler = $client->request('GET', $url);
+        $crawler = $client->request('GET', $req->url);
 
         $articles = $this->scrapeIkeaData($crawler);
         $product_arr = [];
@@ -162,8 +162,26 @@ class scrapeController extends Controller
            $product_arr[] = $product;
         }
 
-        dd($product_arr);
-        return view('scrape-result', compact('articles'));
+        foreach ($product_arr as $item) {
+           $exists = Article::where('slug', $item->slug)->count();
+
+           if($exists > 0) continue;
+
+            // Create or add category to db
+            $articleEntity = new Article();
+            $articleEntity->title = $item->title;
+            $articleEntity->slug = $item->slug;
+            $articleEntity->product_code = $item->product_code;
+            $articleEntity->description = $item->description;
+            $articleEntity->price = $item->price;
+            $articleEntity->img_src = $item->img_src;
+            $articleEntity->category_id = $req->category_id;
+            $articleEntity->store_id = 1;
+            $articleEntity->save();
+       }
+
+       //dd($product_arr);
+        return view('scrape.scrape-result', compact('product_arr'));
     }
 
     private function scrapeIkeaData($crawler){
@@ -180,16 +198,17 @@ class scrapeController extends Controller
         $crawler = $client->request('GET', $url);
 
         $article = new stdClass();
-        $article->name = $crawler->filter('.pip-header-section .pip-header-section__title--big')->text();
+        $article->title = $crawler->filter('.pip-header-section .pip-header-section__title--big')->text();
         $article->product_code = $crawler->filter('.pip-product-identifier__value')->text();
         $article->description = $crawler->filter('.pip-product-summary__description')->text();
         $article->price = $crawler->filter('.pip-price__integer')->text();
+        $article->slug = $url;
         $article->img_src = $crawler->filter('.pip-media-grid__media-container ')->first()->filter('.pip-media-grid__media-image .pip-aspect-ratio-image__image')->attr('src');
         return $article;
     }
 
     private function getNextIkeaPage( $crawler ){
-        $linkTag = $crawler->filter('.pagination__ajax')->selectLink('Toon meer items');
+        $linkTag = $crawler->filter('.plp-btn .plp-btn--small .plp-btn--secondary')->selectLink('Toon meer');
         if($linkTag->count() <= 0) return;
         $link = $linkTag->link();
         
