@@ -12,7 +12,6 @@ class RegistryController extends Controller
     }
     
     public function unlocked(Request $req){
-
         $correct_registry = Registry::find($req->reg_id);
         if($req->secret_password === $correct_registry->password){
             dd('correct');
