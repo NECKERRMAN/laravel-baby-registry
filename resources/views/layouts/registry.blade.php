@@ -10,9 +10,13 @@
     <meta class="foundation-mq">
 </head>
 
-<body>
-    @include('partials.header')
-
+<body class="bg-green-100">
+    <header class="p-4 pb-2">
+          <div class="flex flex-col items-center mb-4">
+            <img src="/images/storksie-logo.png" alt="storksie-logo" class="w-20 h-20">
+            <h1>Storksie</h1>
+            </div>
+      </header>
     <main class="max-w-screen-xl m-auto mt-5 mb-5">
         @yield('title')
 

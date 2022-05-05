@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\scrapeController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\RegistryController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,6 +18,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PageController::class, 'index'])->name('home');
 Route::get('/articles', [PageController::class, 'articles'])->name('articles');
+Route::get('/registry/robin-27071998', [RegistryController::class, 'locked'])->name('locked');
+Route::post('/registry/robin-27071998', [RegistryController::class, 'unlocked'])->name('unlocked');
 
 Route::get('/admin/scrape', [scrapeController::class, 'show']);
 Route::post('/scrape/categories', [scrapeController::class, 'scrapeCategories'])->name('scrape.categories');

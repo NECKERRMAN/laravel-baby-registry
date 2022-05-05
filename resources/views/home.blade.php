@@ -1,11 +1,15 @@
 @extends('layouts.main')
 
 @section('content')
-<p> Nothing here yet... </p>
+<div class="banner">
+  <p class="banner__title">He jij daar!</p>
+  <p class="banner__subtitle">Op zoek naar een gepersonaliseerde geboortelijst?</p>
+  <div class="banner__img">
+    <img src="/images/storksie-logo.png" alt="">
+  </div>
+</div>
 @endsection
 
 @section('title')
-<div class="text-center m-5 mb-6">
-    <h1 class="text-xl">Hello there</h1>
-  </div>
+
 @endsection

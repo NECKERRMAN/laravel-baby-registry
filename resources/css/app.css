@@ -26,3 +26,26 @@ h1, h2, h3{
     font-size: 1.2rem;
     font-weight: 700;
 }
+
+/* Banner */
+.banner{
+    width: 80%;
+    padding: 2rem;
+    margin: auto;
+    background-color: #dcfce7;
+    border-radius: 5px;
+}
+
+.banner__title{
+    font-size: 2rem;
+    font-family: 'Sacramento', cursive;
+
+}
+
+input[type='password']{
+    border-radius: 5px;
+    outline: #166534;
+}
+
+input[type="password"]:focus{
+}
