@@ -147,7 +147,7 @@ class scrapeController extends Controller
 
             $categoryEntity->save();
         }
-        return view('scrape-form');
+        return view('scrape.scrape-form');
 
     }
 

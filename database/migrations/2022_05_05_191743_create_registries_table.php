@@ -15,7 +15,13 @@ return new class extends Migration
     {
         Schema::create('registries', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id');
+            $table->string('name');
+            $table->string('baby_name');
+            $table->date('birthdate');
+            $table->string('slug');
             $table->string('password');
+            $table->string('articles');
             $table->timestamps();
         });
     }
