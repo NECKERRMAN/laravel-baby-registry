@@ -1,0 +1,8 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+.dashboard__list li{
+    list-style-type: roman;
+    list-style-position: inside;
+}

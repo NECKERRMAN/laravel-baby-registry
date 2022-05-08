@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\Admin\scrapeController;
+use App\Http\Controllers\Articles\ArticleController;
 use App\Http\Controllers\PageController;
-use App\Http\Controllers\RegistryController;
+use App\Http\Controllers\Registry\RegistryController;
+use App\Http\Controllers\User\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,17 +18,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// PAGE
 Route::get('/', [PageController::class, 'index'])->name('home');
-Route::get('/articles', [PageController::class, 'articles'])->name('articles');
-Route::get('/registry/robin-27071998', [RegistryController::class, 'locked'])->name('locked');
-Route::post('/registry/robin-27071998', [RegistryController::class, 'unlocked'])->name('unlocked');
+Route::get('/dashboard', [PageController::class, 'dashboard'])->middleware(['auth'])->name('dashboard');
 
+//Scrape
 Route::get('/admin/scrape', [scrapeController::class, 'show']);
 Route::post('/scrape/categories', [scrapeController::class, 'scrapeCategories'])->name('scrape.categories');
 Route::post('/scrape/articles', [scrapeController::class, 'scrapeArticles'])->name('scrape.articles');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+// User
+Route::get('/my-account', [UserController::class, 'showUserDetails'])->middleware(['auth'])->name('user.account');
+
+//Registry
+Route::get('/my-lists', [RegistryController::class, 'index'])->middleware(['auth'])->name('my-lists');
+Route::get('/registry/robin-27071998', [RegistryController::class, 'locked'])->name('locked');
+Route::post('/registry/robin-27071998', [RegistryController::class, 'unlocked'])->name('unlocked');
+
+// Articles
+Route::get('/articles', [ArticleController::class, 'articles'])->name('articles.articles');
+Route::get('/articles/article/{id}', [ArticleController::class, 'getArticle'])->name('articles.article');
 
 require __DIR__.'/auth.php';

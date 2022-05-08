@@ -13,7 +13,7 @@
 <body>
     @include('partials.header')
 
-    <main class="max-w-screen-xl m-auto mt-5 mb-5">
+    <main class="page-wrapper m-auto mt-5 mb-5">
         @yield('title')
 
         @yield('content')

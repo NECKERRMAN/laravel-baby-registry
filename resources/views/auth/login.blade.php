@@ -2,7 +2,7 @@
     <x-auth-card>
         <x-slot name="logo">
             <a href="/">
-                <x-application-logo class="fill-current text-gray-500" />
+                <x-login-logo class="fill-current text-gray-500" />
             </a>
         </x-slot>
 
