@@ -11,9 +11,10 @@ class RegistryController extends Controller
 
     public function index(){
         $user_id = auth()->user()->id;
-        $allRegistries = Registry::find($user_id);
 
-        dd($allRegistries);
+        return view('registry.registries', [
+            'registries' => Registry::all(),
+        ]);
     }
 
     public function locked(){

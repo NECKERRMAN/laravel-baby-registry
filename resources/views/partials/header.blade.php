@@ -15,7 +15,7 @@
         <img src="/images/storksie-logo.png" alt="storksie-logo" class="w-20 h-20">
         <h1>Storksie</h1>
     </div>
-      @if (Route::has('login'))
+
       <div class="flex items-center">
           @auth
               <a href="{{ route('user.account')}}">{{ ucfirst(__('my account'))}} <i class="fa-solid fa-user"></i></a>
@@ -24,12 +24,10 @@
                 @csrf
               </form>
           @endauth
-          @else
+            @guest
               <a href="{{ route('login') }}" class="text-sm text-gray-700 dark:text-gray-500 rounded px-4 py-2 border-2	border-gray-700">{{ strtoupper(__('login'))}}</i></a>
-              @if (Route::has('register'))
-                  <a href="{{ route('register') }}" class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">{{ ucwords( __('register'))}}</a>
-              @endif
+              <a href="{{ route('register') }}" class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">{{ ucwords( __('register'))}}</a>
+            @endguest
       </div>
-      @endif
     </div>
   </header>

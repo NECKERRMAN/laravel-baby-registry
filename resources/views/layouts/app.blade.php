@@ -14,16 +14,15 @@
         <script src="{{ asset('js/app.js') }}" defer></script>
     </head>
     <body class="antialiased">
-        <div class="min-h-screen bg-green-100">
+        <div class="min-h-screen bg-white">
             @include('layouts.navigation')
 
             <!-- Page Heading -->
-            <header class="bg-white shadow text-center">
-                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    {{-- {{ $header }} --}}
-                    @yield('header')
-                </div>
-            </header>
+{{--             <header class="bg-white shadow text-center">
+                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8"> --}}
+                    {{-- @yield('header') --}}
+{{--                 </div>
+            </header> --}}
 
             <!-- Page Content -->
             <main>
