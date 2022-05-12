@@ -1,7 +1,4 @@
 @extends('layouts.app')
-@section('stylesheet')
-    <link rel="stylesheet" href="{{ asset('css/dashboard/dashboard.css') }}">
-@endsection
 
 @section('header')
     <h1>{{ ucfirst(__('welcome_back'))}}</h1>
@@ -21,7 +18,7 @@
                        <li class="font-bold">{{ucfirst(__('important_password'))}} <a href="/my-lists" class="underline">{{__('my_lists')}}</a> - {{__('passwords')}}</li>
                    </ul>
 
-                   <a class="my-2 p-4 rounded border-2" href="{{ route('my-lists')}}">Naar mijn geboortelijst(en)</a>
+                   <a class="my-2 p-4 rounded border-2" href="{{ route('registry.all')}}">Naar mijn geboortelijst(en)</a>
                 </div>
             </div>
         </div>

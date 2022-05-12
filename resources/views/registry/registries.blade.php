@@ -4,6 +4,8 @@
     <div class="page-wrapper">
         <h1 class="my-4">{{ucfirst(__('welcome'))}} {{ auth()->user()->name}}</h1>
         <div class="user-registries">
+            <h2>{{ ucfirst(__('new_registry'))}}</h2>
+            <a class="link-btn inline-block mb-4" href="{{route('registry.new')}}">{{ucfirst(__('new_registry_btn'))}}</a>
             <h2>{{ ucfirst(__('my_lists'))}}</h2>
             @if (count($registries) < 1)
             <p class="mb-4">Oops, looks like you have no registries yet...</p>
@@ -31,8 +33,6 @@
                     </table>
                 </div>
             @endif
-            <h2>{{ ucfirst(__('new_registry'))}}</h2>
-            <a class="link-btn" href="{{route('registry.new')}}">{{ucfirst(__('new_registry_btn'))}}</a>
         </div>
     </div>
 @endsection

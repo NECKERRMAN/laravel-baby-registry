@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Registry;
 
 use App\Http\Controllers\Controller;
+use App\Models\Article;
 use App\Models\Registry;
 use Illuminate\Http\Request;
 
@@ -11,9 +12,9 @@ class RegistryController extends Controller
 
     public function index(){
         $user_id = auth()->user()->id;
-
+        $user_registries = Registry::where('user_id', '=', $user_id)->get();
         return view('registry.registries', [
-            'registries' => Registry::all(),
+            'registries' => $user_registries,
         ]);
     }
 
@@ -41,6 +42,17 @@ class RegistryController extends Controller
 
     public function editRegistry(Registry $registry){
         dd('edit');
+    }
+
+    public function addArticles(Request $req){
+        $registry = Registry::find($req->id);
+        if(auth()->user()->id !== $registry->user_id){
+            return redirect()->back();
+        }
+        return view('registry.items', [
+            'registry' => $registry,
+            'articles' => Article::all()
+        ]);
     }
 
     public function locked(){

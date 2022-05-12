@@ -1,4 +1,4 @@
-<a href="articles/article/{{ $article->id }}" class="card rounded-md">
+<a href="/articles/article/{{ $article->id }}" class="card rounded-md">
     <div class="card__img m-1">
         <img src="{{ $article->img_src }}" alt="product-img" class="rounded-md">
     </div>

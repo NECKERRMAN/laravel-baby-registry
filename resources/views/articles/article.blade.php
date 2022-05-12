@@ -6,7 +6,7 @@
         <p class="article__category">{{ ucfirst(__('articles'))}} > {{ $category->title }}</p>
         <div class="flex">
             <div class="article__img">
-                <img src="https://www.babycompany.be/50963-large_default/trixie-puppet-world-l-strand.jpg" alt="a" class="rounded">
+                <img src="{{ $article->img_src }}" alt="a" class="rounded">
             </div>
             <div class="article__content">
                 <p class="article__product-code">{{ $article->product_code }}</p>
