@@ -772,6 +772,9 @@ select{
 .grid-cols-1{
   grid-template-columns: repeat(1, minmax(0, 1fr));
 }
+.grid-cols-4{
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
 .flex-row{
   flex-direction: row;
 }
@@ -909,6 +912,9 @@ select{
 }
 .p-6{
   padding: 1.5rem;
+}
+.p-1{
+  padding: 0.25rem;
 }
 .px-4{
   padding-left: 1rem;

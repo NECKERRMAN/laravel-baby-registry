@@ -14,7 +14,8 @@ class scrapeController extends Controller
     public function show(){
         $shops = [
             'dreambaby' => 'Dreambaby',
-            'ikea' => 'Ikea Baby'
+            'ikea' => 'Ikea Baby',
+            'ptitchou' => 'P\'Tit Chou'
         ];
 
         $allCategories = Category::all();
@@ -23,13 +24,15 @@ class scrapeController extends Controller
     }
 
     public function scrapeCategories(Request $req){
-        //dd($req->all());
         switch($req->shop){
             case 'dreambaby':
                 $this->scrapeDreamBabyCategories($req->url);
                 break;
             case 'ikea':
                 $this->scrapeIkeaCategories($req->url);
+                break;
+            case 'ptitchou':
+                $this->scrapePtitCategories($req->url);
                 break;
         }
     }
@@ -41,6 +44,9 @@ class scrapeController extends Controller
                 break;
             case 'ikea':
                 $this->scrapeIkeaArticles($req);
+                break;
+            case 'ptitchou':
+                $this->scrapePtitArticles($req);
                 break;
         }
     }
@@ -130,7 +136,7 @@ class scrapeController extends Controller
                 $cat->title = $title;
                 $cat->url = $url;
                 $cat->store_name = 'ikea';
-
+                $cat->store_id = 2;
                 return $cat; 
             });
         foreach($categories as $scrapeCategory){
@@ -143,6 +149,7 @@ class scrapeController extends Controller
             $categoryEntity->title = $scrapeCategory->title;
             $categoryEntity->url = $scrapeCategory->url;
             $categoryEntity->store_name = $scrapeCategory->store_name;
+            $categoryEntity->store_id = $scrapeCategory->store_id;
 
 
             $categoryEntity->save();
@@ -158,7 +165,7 @@ class scrapeController extends Controller
         $articles = $this->scrapeIkeaData($crawler);
         $product_arr = [];
         foreach ($articles as $article) {
-           $product = $this->scrapeProductData($article->url);
+           $product = $this->scrapeIkeaProductData($article->url);
            $product_arr[] = $product;
         }
 
@@ -176,7 +183,7 @@ class scrapeController extends Controller
             $articleEntity->price = $item->price;
             $articleEntity->img_src = $item->img_src;
             $articleEntity->category_id = $req->category_id;
-            $articleEntity->store_id = 1;
+            $articleEntity->store_id = 2;
             $articleEntity->save();
        }
 
@@ -193,7 +200,7 @@ class scrapeController extends Controller
         return $test;
     }
 
-    private function scrapeProductData($url){
+    private function scrapeIkeaProductData($url){
         $client = new Client();
         $crawler = $client->request('GET', $url);
 
@@ -207,17 +214,102 @@ class scrapeController extends Controller
         return $article;
     }
 
-    private function getNextIkeaPage( $crawler ){
-        $linkTag = $crawler->filter('.plp-btn .plp-btn--small .plp-btn--secondary')->selectLink('Toon meer');
-        if($linkTag->count() <= 0) return;
-        $link = $linkTag->link();
-        
-        if(!$link) return;
+
+    // P'TIT CHOU
+    private function scrapePtitCategories($url){
+        $client = new Client();
+        $crawler = $client->request('GET', $url);
+        // #categories_block_left .block_content
+        $categories = $crawler->filter('.row.products .product--excerpt')
+            ->each(function($node){
+                $title = $node->filter('.woocommerce-loop-category__title')->text();
+                $url = $node->filter('a')->attr('href');
+
+                $cat = new stdClass();
+                $cat->title = $title;
+                $cat->url = $url;
+                $cat->store_name = 'ptitchou';
+                $cat->store_id = '3';
+                return $cat; 
+            });
+
+        foreach($categories as $scrapeCategory){
+            // Does it yet exist? 
+            $exists = Category::where('url', $scrapeCategory->url)->count();
+            if($exists > 0) continue;
+
+            // Create or add category to db
+            $categoryEntity = new Category();
+            $categoryEntity->title = $scrapeCategory->title;
+            $categoryEntity->url = $scrapeCategory->url;
+            $categoryEntity->store_name = $scrapeCategory->store_name;
+            $categoryEntity->store_id = $scrapeCategory->store_id;
+
+            $categoryEntity->save();
+        }
+        return view('scrape.scrape-form');
+    }
+
+    private function scrapePtitArticles($req){
 
         $client = new Client();
-        $nextCrawler = $client->click($link);
+        $crawler = $client->request('GET', $req->url);
 
-        return $nextCrawler;
+        $articles = $this->scrapePtitData($crawler);
+        $product_arr = [];
+        foreach ($articles as $article) {
+            $product = $this->scrapePtitProductData($article->url);
+            $product_arr[] = $product;
+        }
+        
+        foreach ($product_arr as $item) {
+            $exists = Article::where('slug', $item->slug)->count();
+
+            if($exists > 0) continue;
+
+            // Create or add category to db
+            $articleEntity = new Article();
+            $articleEntity->title = $item->title;
+            $articleEntity->slug = $item->slug;
+            $articleEntity->product_code = $item->product_code;
+            $articleEntity->description = $item->description;
+            $articleEntity->price = $item->price;
+            $articleEntity->img_src = $item->img_src;
+            $articleEntity->category_id = $req->category_id;
+            $articleEntity->store_id = 3;
+            $articleEntity->save();
+        }
+
+        //dd($product_arr);
+        return view('scrape.scrape-result', compact('product_arr'));
     }
+
+    private function scrapePtitData($crawler){
+       return $crawler->filter('.row.products .product--excerpt')->each(function($node){
+            $article = new stdClass();
+            $article->url = $node->filter('a')->attr('href');
+            return $article;
+        });
+    }
+
+    private function scrapePtitProductData($url){
+        $client = new Client();
+        $crawler = $client->request('GET', $url);
+
+        $article = new stdClass();
+        $article->title = $crawler->filter('.product_title.entry-title')->text();
+        $article->product_code = $crawler->filter('form input[name=gtm4wp_sku]')->attr('value');
+        $article->price = $crawler->filter('form input[name=gtm4wp_price]')->attr('value');
+        if($crawler->filter('#description')->count() > 0){
+            $article->description = $crawler->filter('#description')->text();
+        } else {
+            $article->description = 'No description available...';
+        }
+        $article->slug = $url;
+        $article->img_src = $crawler->filter('.wp-post-image')->first()->attr('src');
+
+        return $article;
+    }
+
 }
 

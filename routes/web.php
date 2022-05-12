@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\addStoreController;
 use App\Http\Controllers\Admin\scrapeController;
 use App\Http\Controllers\Articles\ArticleController;
 use App\Http\Controllers\PageController;
@@ -24,6 +25,7 @@ Route::get('/dashboard', [PageController::class, 'dashboard'])->middleware(['aut
 
 //Scrape
 Route::get('/admin/scrape', [scrapeController::class, 'show']);
+Route::post('/scrape/store', [addStoreController::class, 'addStore'])->name('scrape.store');
 Route::post('/scrape/categories', [scrapeController::class, 'scrapeCategories'])->name('scrape.categories');
 Route::post('/scrape/articles', [scrapeController::class, 'scrapeArticles'])->name('scrape.articles');
 

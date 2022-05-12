@@ -12,9 +12,46 @@
         <div class="row py-5">
             <div class="col-sm-8 offset-sm-2">
                 <h1>Scrape data</h1>
+{{--                 <form action="{{ route('scrape.store')}}" method="post">
+                    <h2>1. First add a store</h2>
+                    @csrf
+                <div class="form-group pb-1">
+                    <label for="storeName">
+                        Store name
+                    </label>
+                    <input class="form-control" type="text" name="storeName" id="storeName" placeholder="e.g. Ikea Baby">
+                </div>
+                <div class="form-group pb-1">
+                    <label for="storeKey">
+                        Store key (ONE LOWER CASE WORD)
+                    </label>
+                    <input class="form-control" type="text" name="storeKey" id="storeKey" placeholder="e.g. ikea">
+                </div>
+                <div class="form-group pb-1">
+                    <label for="street">
+                        Street
+                    </label>
+                    <input class="form-control" type="text" name="street" id="street">
+                </div>
+                <div class="form-group pb-1">
+                    <label for="zipcode">
+                        Zip code
+                    </label>
+                    <input class="form-control" type="text" name="zipcode" id="zipcode">
+                </div>
+                <div class="form-group pb-1">
+                    <label for="city">
+                        City
+                    </label>
+                    <input class="form-control" type="text" name="city" id="city">
+                </div>
+                <button type="submit" class="btn btn-warning">Add Store</button>
+            </form> --}}
+            <h2>2. SELECT STORE AND ENTER URL</h2>
+
                 <form action="{{ route('scrape.categories')}}" method="post">
                 @csrf
-                <div class="form-group">
+                <div class="form-group py-3">
                     <div>
                         <label for="shop">Webshop</label>
                     </div>
@@ -40,6 +77,7 @@
                     </button>
                 </div>
             </form>
+            <h2>3. SCRAPE ARTICLES</h2>
             <table class="table table-striped">
                 @foreach ($allCategories as $category)
                 <tr>

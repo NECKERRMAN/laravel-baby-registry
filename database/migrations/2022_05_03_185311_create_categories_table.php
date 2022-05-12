@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('url');
             $table->string('store_name');
+            $table->string('store_id');
             $table->timestamps();
         });
     }
