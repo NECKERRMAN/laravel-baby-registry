@@ -6,3 +6,7 @@
     list-style-type: roman;
     list-style-position: inside;
 }
+
+.dashboard a{
+    display: inline-block;
+}

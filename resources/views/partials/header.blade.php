@@ -1,5 +1,5 @@
-<header class="p-4 pb-2 mb-4 bg-green-100">
-    <div class="flex flex-row justify-between page-wrapper items-center">
+<header class="py-2 mb-4">
+    <div class="flex flex-row justify-between page-wrapper items-center border-b-2 border-slate-300">
       <nav>
         <ul class="flex" data-dropdown-menu="tckp8q-dropdown-menu" role="menubar">
           @guest

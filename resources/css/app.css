@@ -8,9 +8,12 @@
 
 /* GOOGLE FONTS IMPORT */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,300;1,300;1,400;0,500;0,700;1,700&family=Sacramento&display=swap');
+/* ADOBE FONTS IMPORT */
+@import url("https://use.typekit.net/vrh3ltm.css");
+
 
 h1, h2, h3{
-    font-family: 'Sacramento', cursive;
+    font-family: 'pauline', sans-serif;;
     font-size: 150%;
 }
 
@@ -54,7 +57,7 @@ body{
 
 .banner__title{
     font-size: 2rem;
-    font-family: 'Sacramento', cursive;
+    font-family: 'pauline', sans-serif;;
 }
 
 .banner__img{

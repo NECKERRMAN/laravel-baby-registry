@@ -8,7 +8,7 @@
 @endsection
 
 @section('content')
-    <div class="py-12">
+    <div class="py-12 dashboard">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
@@ -21,7 +21,7 @@
                        <li class="font-bold">{{ucfirst(__('important_password'))}} <a href="/my-lists" class="underline">{{__('my_lists')}}</a> - {{__('passwords')}}</li>
                    </ul>
 
-                   <a href="{{ route('my-lists')}}">Naar mijn geboortelijst(en)</a>
+                   <a class="my-2 p-4 rounded border-2" href="{{ route('my-lists')}}">Naar mijn geboortelijst(en)</a>
                 </div>
             </div>
         </div>
