@@ -1,5 +1,10 @@
 {   
     "welcome_back": "Welkom terug bij Storksie!",
+    "welcome": "welkom",
+    "new_registry": "maak een nieuwe geboortelijst",
+    "new_registry_btn": "nieuwe lijst +",
+    "registry name": "naam van de geboortelijst",
+    "example_registry_name": "robin's geboortelijst",
     "welcome_register-logo": "Welkom bij Storksie!",
     "my_lists": "mijn lijsten",
     "how does Storksie work?": "Hoe werkt Storksie?",

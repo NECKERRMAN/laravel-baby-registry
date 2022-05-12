@@ -11,7 +11,7 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('my-lists')" :active="request()->routeIs('my-lists')">
+                    <x-nav-link :href="route('registry.all')" :active="request()->routeIs('registry.all')">
                         {{ ucfirst(__('my_lists')) }}
                     </x-nav-link>
                 </div>

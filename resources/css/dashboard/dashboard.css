@@ -10,3 +10,28 @@
 .dashboard a{
     display: inline-block;
 }
+
+.user-registries--form div{
+    margin-bottom: 1rem;
+}
+.user-registries--form input{
+    width: 100%;
+    outline: none;
+    border-radius: 5px;
+    border-color: #9EC4C5;
+}
+
+.user-registries--form button,
+.link-btn{
+    background-color: #9EC4C5;
+    padding: 0.5rem 1rem;
+    font-weight: 700;
+    color: white;
+    border-radius: 5px;
+}
+
+
+.user-registries--form button:hover,
+.link-btn:hover{
+    background-color: #89a1a1;
+}

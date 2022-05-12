@@ -33,7 +33,10 @@ Route::post('/scrape/articles', [scrapeController::class, 'scrapeArticles'])->na
 Route::get('/my-account', [UserController::class, 'showUserDetails'])->middleware(['auth'])->name('user.account');
 
 //Registry
-Route::get('/my-lists', [RegistryController::class, 'index'])->middleware(['auth'])->name('my-lists');
+Route::get('/registry/all', [RegistryController::class, 'index'])->middleware(['auth'])->name('registry.all');
+Route::get('/registry/new', [RegistryController::class, 'new'])->middleware(['auth'])->name('registry.new');
+Route::post('/registry/new', [RegistryController::class, 'createRegistry'])->middleware(['auth'])->name('registry.create');
+Route::get('/registry/edit/{id}', [RegistryController::class, 'editRegistry'])->middleware(['auth'])->name('registry.edit');
 Route::get('/registry/robin-27071998', [RegistryController::class, 'locked'])->name('locked');
 Route::post('/registry/robin-27071998', [RegistryController::class, 'unlocked'])->name('unlocked');
 
