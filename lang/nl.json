@@ -1,6 +1,9 @@
 {   
     "welcome_back": "Welkom terug bij Storksie!",
     "welcome": "welkom",
+    "back": "terug",
+    "save": "opslaan",
+    "current articles": "huidige artikelen",
     "new_registry": "maak een nieuwe geboortelijst",
     "new_registry_btn": "nieuwe lijst +",
     "registry name": "naam van de geboortelijst",

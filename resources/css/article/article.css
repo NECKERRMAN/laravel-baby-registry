@@ -1,6 +1,13 @@
 .article__img{
     width: 70%;
+    align-items: center;
 }
+
+.card{
+    border: 1px solid #9EC4C5;
+}
+
+
 
 .article__category{
     font-size: small;
@@ -13,8 +20,10 @@
     font-size: 1.75rem;
 }
 
+
+
 .article__img img{
-    width: 100%;
+    width: 100%;;
 }
 
 .article__name{
@@ -59,3 +68,4 @@
         flex-direction: column;
     }
   } */
+

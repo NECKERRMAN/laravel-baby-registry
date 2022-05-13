@@ -30,6 +30,10 @@
     border-radius: 5px;
 }
 
+.link-btn{
+    display: inline-block;
+}
+
 
 .user-registries--form button:hover,
 .link-btn:hover{

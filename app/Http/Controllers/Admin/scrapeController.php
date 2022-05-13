@@ -7,11 +7,23 @@ use App\Models\Article;
 use App\Models\Category;
 use Goutte\Client;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Route;
 use stdClass;
 
 class scrapeController extends Controller
 {
+
+    public function checkAdmin(){
+        $user_role = auth()->user()->user_role;
+
+        if($user_role !== 1){
+            Route::redirect('/admin/scrape', '/', 404);
+        }
+    }
+
     public function show(){
+        $this->checkAdmin();
+
         $shops = [
             'dreambaby' => 'Dreambaby',
             'ikea' => 'Ikea Baby',
