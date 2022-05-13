@@ -9,19 +9,19 @@
                 <p class="ml-4">Let's add some articles</p>
             </div>
             <div class="flex mt-4">
-                <aside class="mr-4 w-1/3">
+                <aside class="mr-4 w-1/5">
                     <h3>{{ucfirst(__('current articles')) }}</h3>
                     @foreach ($current_articles as $curr)
                     <p>{{ $curr }}</p>
                     @endforeach 
-                    <a href="#" class="link-btn">{{__('save')}}</a>
+                    <a href="{{ route('registry.overview', ['id' => $registry->id])}}" class="link-btn">{{__('save')}}</a>
                 </aside>
-                <div class=" w-2/3">
+                <div class=" w-4/5">
                     @include('partials.articles-filter')
                     @if($errors->any())
                         <p class="mt-4 text-red-500">{{$errors->first()}}</p>
                     @endif
-                    <div class="grid md:grid-cols-3 sm:grid-cols-2 lg:gird-cols-4 gap-4 mt-4">
+                    <div class="grid md:grid-cols-4 sm:grid-cols-2 lg:gird-cols-4 gap-4 mt-4">
                         @foreach ($articles as $article)
                             @include('articles.add', ['reg_id' => $registry->id ])
                         @endforeach

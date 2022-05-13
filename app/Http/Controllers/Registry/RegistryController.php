@@ -59,6 +59,7 @@ class RegistryController extends Controller
 
         foreach($registry_articles as $article){
             $art = Article::find($article);
+
             $current_articles[] = $art->title;
         }
 
@@ -86,15 +87,15 @@ class RegistryController extends Controller
     
     // Add article to wishlist
     public function addArticle(Request $req){
-        $current_registry = Registry::find($req->reg_id);
+        $current_registry = Registry::findOrFail($req->reg_id);
         $current_articles = unserialize($current_registry->articles);
-        $new_article = $req->article_id;
+        $new_article = Article::findOrFail($req->article_id);
 
         if(in_array($new_article, $current_articles)){
             return redirect()->route('registry.addArticles', ['id' => $current_registry->id])->withErrors(['msg' => 'Item is already added']);
         }
 
-        $current_articles[] = $new_article;
+        $current_articles[] = $new_article->id;
 
         $current_registry->articles = serialize($current_articles);
         $current_registry->save();
@@ -139,7 +140,36 @@ class RegistryController extends Controller
         ]);
     }
 
+    public function showOverview(Request $req){
+        $registry = Registry::find($req->id);
+        $reg_articles = $registry->articles;
+        $articles = [];
+
+        foreach(unserialize($reg_articles) as $key => $article_id){
+            $article = Article::find($article_id);
+
+            $articles[] = [
+                'id' => $article->id, 
+                'title' => $article->title, 
+                'slug' => $article->slug, 
+                'img_src' => $article->img_src, 
+                'category' => Category::find($article->category_id)
+            ];
+        }
+
+        // Set array to object
+        $arrayResult = array_map(function($array){
+                        return (object)$array;
+                    }, $articles);
+
+        return view('registry.overview', [
+                'registry' => $registry,
+                'articles' => $arrayResult
+        ]);
+    }
+
     public function locked(){
+        dd(request());
         return view('registry.locked');
     }
     

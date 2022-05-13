@@ -34,15 +34,18 @@ Route::post('/scrape/articles', [scrapeController::class, 'scrapeArticles'])->na
 Route::get('/my-account', [UserController::class, 'showUserDetails'])->middleware(['auth'])->name('user.account');
 
 //Registry
-Route::get('/registry/all', [RegistryController::class, 'index'])->middleware(['auth'])->name('registry.all');
-Route::get('/registry/new', [RegistryController::class, 'new'])->middleware(['auth'])->name('registry.new');
-Route::post('/registry/new', [RegistryController::class, 'createRegistry'])->middleware(['auth'])->name('registry.create');
-Route::get('/registry/{id}/all-articles', [RegistryController::class, 'allArticles'])->middleware(['auth'])->name('registry.addArticles');
-Route::get('/registry/{id}/filter-articles', [RegistryController::class, 'filterArticles'])->middleware(['auth'])->name('registry.filterArticles');
-Route::post('/registry/add-article', [RegistryController::class, 'addArticle'])->name('registry.addOne');
-Route::get('/registry/edit/{id}', [RegistryController::class, 'editRegistry'])->middleware(['auth'])->name('registry.edit');
-Route::get('/registry/robin-27071998', [RegistryController::class, 'locked'])->name('locked');
-Route::post('/registry/robin-27071998', [RegistryController::class, 'unlocked'])->name('unlocked');
+Route::prefix('registry')->group(function() {
+    Route::get('all', [RegistryController::class, 'index'])->middleware(['auth'])->name('registry.all');
+    Route::get('{id}/overview', [RegistryController::class, 'showOverview'])->middleware(['auth'])->name('registry.overview');
+    Route::get('new', [RegistryController::class, 'new'])->middleware(['auth'])->name('registry.new');
+    Route::post('new', [RegistryController::class, 'createRegistry'])->middleware(['auth'])->name('registry.create');
+    Route::get('{id}/all-articles', [RegistryController::class, 'allArticles'])->middleware(['auth'])->name('registry.addArticles');
+    Route::get('{id}/filter-articles', [RegistryController::class, 'filterArticles'])->middleware(['auth'])->name('registry.filterArticles');
+    Route::post('add-article', [RegistryController::class, 'addArticle'])->name('registry.addOne');
+    Route::get('edit/{id}', [RegistryController::class, 'editRegistry'])->middleware(['auth'])->name('registry.edit');
+    Route::get('robin-27071998', [RegistryController::class, 'locked'])->name('locked');
+    Route::post('robin-27071998', [RegistryController::class, 'unlocked'])->name('unlocked');
+});
 
 // Articles
 Route::get('/articles', [ArticleController::class, 'articles'])->name('articles.articles');

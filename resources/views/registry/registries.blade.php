@@ -26,6 +26,7 @@
                                 <td>http://www.storksie.be/{{ $registry->slug }}</td>
                                 <td>
                                     <a class="link-btn inline-block" href="{{ route('registry.edit', $registry->id )}}">Edit</a>
+                                    <a class="link-btn inline-block" href="{{ route('registry.overview', $registry->id )}}">Overview</a>
                                 </td>
                             </tr>
                             @endforeach
