@@ -6,6 +6,7 @@ use App\Http\Controllers\Articles\ArticleController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\Registry\RegistryController;
 use App\Http\Controllers\User\UserController;
+use App\Models\Registry;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -38,6 +39,7 @@ Route::get('/registry/new', [RegistryController::class, 'new'])->middleware(['au
 Route::post('/registry/new', [RegistryController::class, 'createRegistry'])->middleware(['auth'])->name('registry.create');
 Route::get('/registry/{id}/all-articles', [RegistryController::class, 'allArticles'])->middleware(['auth'])->name('registry.addArticles');
 Route::get('/registry/{id}/filter-articles', [RegistryController::class, 'filterArticles'])->middleware(['auth'])->name('registry.filterArticles');
+Route::post('/registry/add-article', [RegistryController::class, 'addArticle'])->name('registry.addOne');
 Route::get('/registry/edit/{id}', [RegistryController::class, 'editRegistry'])->middleware(['auth'])->name('registry.edit');
 Route::get('/registry/robin-27071998', [RegistryController::class, 'locked'])->name('locked');
 Route::post('/registry/robin-27071998', [RegistryController::class, 'unlocked'])->name('unlocked');

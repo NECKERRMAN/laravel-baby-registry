@@ -6,10 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Models\Article;
 use App\Models\Category;
 use App\Models\Registry;
+use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 
 class RegistryController extends Controller
 {
+
 
     public function index(){
         $user_id = auth()->user()->id;
@@ -17,12 +19,14 @@ class RegistryController extends Controller
         return view('registry.registries', [
             'registries' => $user_registries,
         ]);
+
     }
 
     public function new(){
         return view('registry.create');
     }
 
+    // Save registry
     public function createRegistry(Request $req){
         $user_id = $req->user_id;
         // Unique slug for the list babyname + userID + birthdate
@@ -41,19 +45,37 @@ class RegistryController extends Controller
         
     }
 
+    // edit registry
     public function editRegistry(Registry $registry){
         dd('edit');
     }
 
+    // Function to get all current registry articles
+    public function getCurrentArticles($id){
+        $registry = Registry::find($id);
+        $registry_articles = unserialize($registry->articles);
+
+        $current_articles[] = '';
+
+        foreach($registry_articles as $article){
+            $art = Article::find($article);
+            $current_articles[] = $art->title;
+        }
+
+        return $current_articles;
+    }
+
+    // Get all articles
     public function allArticles(Request $req){
         $registry = Registry::find($req->id);
-        $articles = Article::orderBy('price', 'asc')->get();
-        $current_articles = [];
-
         // Check if user has acces
         if(auth()->user()->id !== $registry->user_id){
             return redirect()->back();
         }
+        
+        $articles = Article::orderBy('price', 'asc')->get();
+        $current_articles = $this->getCurrentArticles($req->id);
+
         return view('registry.items', [
             'registry' => $registry,
             'articles' => $articles,
@@ -62,14 +84,30 @@ class RegistryController extends Controller
         ]);
     }
     
+    // Add article to wishlist
     public function addArticle(Request $req){
-        dd($req);
+        $current_registry = Registry::find($req->reg_id);
+        $current_articles = unserialize($current_registry->articles);
+        $new_article = $req->article_id;
+
+        if(in_array($new_article, $current_articles)){
+            return redirect()->route('registry.addArticles', ['id' => $current_registry->id])->withErrors(['msg' => 'Item is already added']);
+        }
+
+        $current_articles[] = $new_article;
+
+        $current_registry->articles = serialize($current_articles);
+        $current_registry->save();
+
+        return redirect()->route('registry.addArticles', ['id' => $current_registry->id]);
+
     }
-    
+
     public function filterArticles(Request $req){
         $category_id = '';
         $articles = '';
         $registry = Registry::find($req->id);
+        $current_articles = $this->getCurrentArticles($req->id);
 
         // Filter on category
         if($req->filter_categories !== 'all'){
@@ -96,6 +134,7 @@ class RegistryController extends Controller
         return view('registry.items', [
             'registry' => $registry,
             'articles' => $articles,
+            'current_articles' => $current_articles,
             'categories' => Category::all()
         ]);
     }
