@@ -166,11 +166,20 @@ class RegistryController extends Controller
     }
     
     public function unlocked(Request $req){
-        $correct_registry = Registry::find($req->reg_id);
-        if($req->secret_password === $correct_registry->password){
-            dd('correct');
-            return view('registry.registry', [
-                'registry' => $correct_registry
+        $reg_slug = $req->slug;
+        $registry = Registry::where('slug', '=', $reg_slug)->first();
+
+        if($req->secret_password === $registry->password){
+            $reg_slug = $req->slug;
+            $registry = Registry::where('slug', '=', $reg_slug)->first();
+            $articles = $this->getRegistryArticles($registry);
+    
+            $cart = Cart::session(1);
+    
+            return view('registry.visitor', [
+                    'registry' => $registry,
+                    'articles' => $articles,
+                    'cart' => $cart
             ]);
         }
     }

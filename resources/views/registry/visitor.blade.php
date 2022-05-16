@@ -17,6 +17,10 @@
                     <button class="py-2 px-4 rounded text-white bg-red-500" type="submit">{{ __('clear')}}</button>
                 </form>
             </div>
+            <form action="{{ route('checkout')}}" method="get">
+                <input type="text" name="name" id="name" placeholder="Your name" required> 
+                <button type="submit" class="inline-block my-4 py-2 px-4 rounded text-white bg-blue-500">Betalen</button>
+            </form>
         </div>
         <div class="grid md:grid-cols-4 sm:grid-cols-2 lg:gird-cols-4 gap-4 mt-4">
             @foreach ($articles as $article)

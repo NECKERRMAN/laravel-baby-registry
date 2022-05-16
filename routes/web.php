@@ -3,9 +3,11 @@
 use App\Http\Controllers\Admin\addStoreController;
 use App\Http\Controllers\Admin\scrapeController;
 use App\Http\Controllers\Articles\ArticleController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\Registry\RegistryController;
 use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\WebhookController;
 use App\Models\Registry;
 use Illuminate\Support\Facades\Route;
 
@@ -44,7 +46,7 @@ Route::prefix('registry')->group(function() {
     Route::post('add-article', [RegistryController::class, 'addArticle'])->name('registry.addOne');
     Route::get('edit/{id}', [RegistryController::class, 'editRegistry'])->middleware(['auth'])->name('registry.edit');
     Route::get('{slug}', [RegistryController::class, 'locked'])->name('locked');
-    Route::post('robin-27071998', [RegistryController::class, 'unlocked'])->name('unlocked');
+    Route::post('{slug}', [RegistryController::class, 'unlocked'])->name('unlocked');
 });
 
 // Articles
@@ -54,5 +56,9 @@ Route::get('/articles/article/{id}', [ArticleController::class, 'getArticle'])->
 // VISITOR
 Route::post('/visitor/add-article', [ArticleController::class, 'add'])->name('visitor.add');
 Route::post('/visitor/clear-cart', [ArticleController::class, 'clear'])->name('visitor.clear');
+Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
+Route::get('/checkout/succes', [CheckoutController::class, 'succes'])->name('checkout.success');
+
+Route::post('/webhooks/mollie', [WebhookController::class, 'handle'])->name('webhooks.mollie');
 
 require __DIR__.'/auth.php';

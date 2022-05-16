@@ -3,7 +3,7 @@
 @section('title')
 <div class="text-center">
     <h1>{{ ucfirst(__('registry_welcome'))}}</h1>
-    <h2>Robin</h2>
+    <h2>{{ $registry->name }}</h2>
 </div>
 @endsection
 
