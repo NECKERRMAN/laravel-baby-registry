@@ -10,7 +10,7 @@
 <body>
     <div class="container">
         <div class="row py-5">
-            @foreach ($product_arr as $article)
+            @foreach ($articles as $article)
             <div class="col-sm-4 col-md-3 col-lg-2">
                 <article>
                     <h5>{{ $article->title }}</h5>

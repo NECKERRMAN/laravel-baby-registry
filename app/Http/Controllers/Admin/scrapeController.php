@@ -8,6 +8,8 @@ use App\Models\Category;
 use Goutte\Client;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
+use Illuminate\Support\Str;
+
 use stdClass;
 
 class scrapeController extends Controller
@@ -17,7 +19,7 @@ class scrapeController extends Controller
         $user_role = auth()->user()->user_role;
 
         if($user_role !== 1){
-            Route::redirect('/admin/scrape', '/', 404);
+            return redirect()->back();
         }
     }
 
@@ -52,7 +54,7 @@ class scrapeController extends Controller
     public function scrapeArticles(Request $req){
         switch($req->shop){
             case 'dreambaby':
-                return $this->scrapeDreambabyArticles($req->url);
+                return $this->scrapeDreambabyArticles($req);
                 break;
             case 'ikea':
                 $this->scrapeIkeaArticles($req);
@@ -76,7 +78,7 @@ class scrapeController extends Controller
                 $cat->title = $title;
                 $cat->url = $url;
                 $cat->store_name = 'dreambaby';
-
+                $cat->store_id = 1;
                 return $cat; 
             });
 
@@ -90,48 +92,70 @@ class scrapeController extends Controller
             $categoryEntity->title = $scrapeCategory->title;
             $categoryEntity->url = $scrapeCategory->url;
             $categoryEntity->store_name = $scrapeCategory->store_name;
+            $categoryEntity->store_id = $scrapeCategory->store_id;
 
             $categoryEntity->save();
         }    
     }
 
-    private function scrapeDreambabyArticles($url){
+    private function scrapeDreambabyArticles($req){
         $client = new Client();
-        $crawler = $client->request('GET', $url);
+        $crawler = $client->request('GET', $req->url);
 
         $articles = $this->scrapeDreamBabyData($crawler);
-        for ($i=0; $i <= 10 ; $i++) { 
-            $crawler = $this->getNextFlaminogPage($crawler);
-            if(!$crawler) break;
-            $articles = array_merge($articles, $this->scrapeFlamingoPageData($crawler));
-        }
         dd($articles);
-        return view('scrape.scrape-result', compact('articles'));
+        $product_arr = [];
+        foreach ($articles as $article) {
+            $product = $this->scrapeDreamBabyProductData($article->url);
+            $product_arr[] = $product;
+        }
+
+        foreach ($product_arr as $item) {
+            $exists = Article::where('slug', $item->slug)->count();
+            if($exists > 0) continue;
+
+            $image_link = $this->storeImage($item, 'dreambaby');
+
+            // Create or add category to db
+            $articleEntity = new Article();
+            $articleEntity->title = $item->title;
+            $articleEntity->slug = $item->slug;
+            $articleEntity->product_code = $item->product_code;
+            $articleEntity->description = $item->description;
+            $articleEntity->price = $item->price;
+            $articleEntity->img_src = $item->img_src;
+            $articleEntity->img_int = $image_link;
+            $articleEntity->category_id = $req->category_id;
+            $articleEntity->store_id = 3;
+            $articleEntity->save();
+        }
+
+        return view('scrape.scrape-result')->with(compact('articles'));
     }
 
     private function scrapeDreamBabyData($crawler){
        return $crawler->filter('.product')->each(function($node){
             $article = new stdClass();
-            $article->title = $node->filter('.product_info a .product_name')->text();
             $article->url = $node->filter('.product_info a')->attr('href');
-            $article->price = $node->filter('.product_info .product_price .product_price .price .value')->text();
-            $article->image = $node->filter('.product_info a .product_image .image img')->attr('src');
-            return $article;
+              return $article;
         });
     }
 
-    private function getNextFlaminogPage( $crawler ){
-        $linkTag = $crawler->filter('.pagination__ajax')->selectLink('Toon meer items');
-        if($linkTag->count() <= 0) return;
-        $link = $linkTag->link();
-        
-        if(!$link) return;
-
+    private function scrapeDreamBabyProductData($url){
         $client = new Client();
-        $nextCrawler = $client->click($link);
+        $crawler = $client->request('GET', $url);
 
-        return $nextCrawler;
+        $article = new stdClass();
+        $article->title = $crawler->filter('.top.namePartPriceContainer h1.main_header')->text();
+        $article->product_code = $crawler->filter('.top.namePartPriceContainer .sku')->text();
+        $article->price = $crawler->filter('.product_price .price .value')->text();
+        $article->description = $crawler->filter('.product_text')->text();
+        $article->slug = $url;
+        $article->img_src = $crawler->filter('.image_container #productMainImage')->first()->attr('src');
+
+        return $article;
     }
+
 
 
     // IKEA
@@ -183,8 +207,10 @@ class scrapeController extends Controller
 
         foreach ($product_arr as $item) {
            $exists = Article::where('slug', $item->slug)->count();
-
            if($exists > 0) continue;
+
+           $image_link = $this->storeImage($item, 'ikea');
+
 
             // Create or add category to db
             $articleEntity = new Article();
@@ -194,13 +220,14 @@ class scrapeController extends Controller
             $articleEntity->description = $item->description;
             $articleEntity->price = $item->price;
             $articleEntity->img_src = $item->img_src;
+            $articleEntity->img_int = $image_link;
             $articleEntity->category_id = $req->category_id;
             $articleEntity->store_id = 2;
             $articleEntity->save();
        }
 
        //dd($product_arr);
-        return view('scrape.scrape-result', compact('product_arr'));
+        return view('scrape.scrape-result')->with(compact('product_arr'));
     }
 
     private function scrapeIkeaData($crawler){
@@ -259,11 +286,9 @@ class scrapeController extends Controller
 
             $categoryEntity->save();
         }
-        return view('scrape.scrape-form');
     }
 
     private function scrapePtitArticles($req){
-
         $client = new Client();
         $crawler = $client->request('GET', $req->url);
 
@@ -276,8 +301,9 @@ class scrapeController extends Controller
         
         foreach ($product_arr as $item) {
             $exists = Article::where('slug', $item->slug)->count();
-
             if($exists > 0) continue;
+
+            $image_link = $this->storeImage($item, 'ptitchou');
 
             // Create or add category to db
             $articleEntity = new Article();
@@ -287,6 +313,7 @@ class scrapeController extends Controller
             $articleEntity->description = $item->description;
             $articleEntity->price = $item->price;
             $articleEntity->img_src = $item->img_src;
+            $articleEntity->img_int = $image_link;
             $articleEntity->category_id = $req->category_id;
             $articleEntity->store_id = 3;
             $articleEntity->save();
@@ -322,6 +349,22 @@ class scrapeController extends Controller
 
         return $article;
     }
+
+    private function storeImage($item, $store){
+        // Random ID, some pictures have the same name
+        $randomId = rand(0,99999);
+        $info = pathinfo($item->img_src);
+        $extension = Str::substr($info['extension'], 0, 3);
+
+        $image = file_get_contents($item->img_src);
+        $slug = Str::slug($item->title);
+        $fileLocation = 'images/' . $store . '/' . $slug . '-' . $randomId . '.' . $extension;
+        file_put_contents(storage_path('app/public/' . $fileLocation), $image);
+
+        return $fileLocation;
+    }
+
+
 
 }
 
