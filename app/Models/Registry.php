@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Registry extends Model
 {
     use HasFactory;
+
+    public function articles(){
+        return $this->hasMany(Article::class);
+    }
 }
