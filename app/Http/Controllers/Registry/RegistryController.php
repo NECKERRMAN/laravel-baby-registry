@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Article;
 use App\Models\Category;
 use App\Models\Registry;
+use Darryldecode\Cart\Facades\CartFacade as Cart;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 
@@ -142,6 +143,39 @@ class RegistryController extends Controller
 
     public function showOverview(Request $req){
         $registry = Registry::find($req->id);
+        $articles = $this->getRegistryArticles($registry);
+
+        return view('registry.overview', [
+                'registry' => $registry,
+                'articles' => $articles
+        ]);
+    }
+
+    public function locked(Request $req){
+        $reg_slug = $req->slug;
+        $registry = Registry::where('slug', '=', $reg_slug)->first();
+        $articles = $this->getRegistryArticles($registry);
+
+        $cart = Cart::session(1);
+
+        return view('registry.visitor', [
+                'registry' => $registry,
+                'articles' => $articles,
+                'cart' => $cart
+        ]);
+    }
+    
+    public function unlocked(Request $req){
+        $correct_registry = Registry::find($req->reg_id);
+        if($req->secret_password === $correct_registry->password){
+            dd('correct');
+            return view('registry.registry', [
+                'registry' => $correct_registry
+            ]);
+        }
+    }
+
+    private function getRegistryArticles($registry){
         $reg_articles = $registry->articles;
         $articles = [];
 
@@ -153,33 +187,14 @@ class RegistryController extends Controller
                 'title' => $article->title, 
                 'slug' => $article->slug, 
                 'img_src' => $article->img_src, 
+                'price' => $article->price,
                 'category' => Category::find($article->category_id)
             ];
         }
 
         // Set array to object
-        $arrayResult = array_map(function($array){
+        return array_map(function($array){
                         return (object)$array;
                     }, $articles);
-
-        return view('registry.overview', [
-                'registry' => $registry,
-                'articles' => $arrayResult
-        ]);
-    }
-
-    public function locked(){
-        dd(request());
-        return view('registry.locked');
-    }
-    
-    public function unlocked(Request $req){
-        $correct_registry = Registry::find($req->reg_id);
-        if($req->secret_password === $correct_registry->password){
-            dd('correct');
-            return view('registry.registry', [
-                'registry' => $correct_registry
-            ]);
-        }
     }
 }

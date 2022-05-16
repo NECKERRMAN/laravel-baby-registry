@@ -43,12 +43,16 @@ Route::prefix('registry')->group(function() {
     Route::get('{id}/filter-articles', [RegistryController::class, 'filterArticles'])->middleware(['auth'])->name('registry.filterArticles');
     Route::post('add-article', [RegistryController::class, 'addArticle'])->name('registry.addOne');
     Route::get('edit/{id}', [RegistryController::class, 'editRegistry'])->middleware(['auth'])->name('registry.edit');
-    Route::get('robin-27071998', [RegistryController::class, 'locked'])->name('locked');
+    Route::get('{slug}', [RegistryController::class, 'locked'])->name('locked');
     Route::post('robin-27071998', [RegistryController::class, 'unlocked'])->name('unlocked');
 });
 
 // Articles
 Route::get('/articles', [ArticleController::class, 'articles'])->name('articles.articles');
 Route::get('/articles/article/{id}', [ArticleController::class, 'getArticle'])->name('articles.article');
+
+// VISITOR
+Route::post('/visitor/add-article', [ArticleController::class, 'add'])->name('visitor.add');
+Route::post('/visitor/clear-cart', [ArticleController::class, 'clear'])->name('visitor.clear');
 
 require __DIR__.'/auth.php';

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Article;
 use App\Models\Category;
 use App\Models\Store;
+use Darryldecode\Cart\Facades\CartFacade as Cart;
 use Illuminate\Http\Request;
 
 class ArticleController extends Controller
@@ -28,5 +29,26 @@ class ArticleController extends Controller
             'store' => $store,
             'category' => $category,
         ]);
+    }
+
+    public function add(Request $req){
+        $article = Article::findOrFail($req->article_id);
+
+        Cart::session(1)->add(array(
+            'id' => $article->id,
+            'name' => $article->title,
+            'price' => $article->price,
+            'quantity' => 1,
+            'attributes' => array(),
+            'associatedModel' => $article
+        ));
+
+        return redirect()->back();
+    }
+
+    public function clear(Request $req){
+        Cart::session(1)->clear();
+        return redirect()->back();
+
     }
 }

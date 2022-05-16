@@ -6,6 +6,6 @@
         <a class="link-btn" href="#">Delete</a>
     </td>
     <td>
-        <p class="text-red-500">Not ordered</p>
+        <p class="text-red-500"></p>
     </td>
 </tr>

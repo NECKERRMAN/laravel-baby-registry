@@ -6,7 +6,11 @@
         <p class="card__title">{{ $article->title }}</p>
         <div class="flex justify-between items-center">
             <p>€ {{ sprintf("%.2f", $article->price) }}</p>
-            <a href="#" class="link-btn add-btn">Voeg toe</a>
+            <form action="{{ route('visitor.add')}}" method="post">
+                @csrf
+                <input type="hidden" name="article_id" value="{{ $article->id }}">
+                <button class="link-btn add-btn">{{ __('add')}}</button>
+            </form>
         </div>
     </div>  
 </div>
