@@ -923,10 +923,6 @@ select{
   --tw-bg-opacity: 1;
   background-color: rgb(239 68 68 / var(--tw-bg-opacity));
 }
-.bg-blue-500{
-  --tw-bg-opacity: 1;
-  background-color: rgb(59 130 246 / var(--tw-bg-opacity));
-}
 .fill-current{
   fill: currentColor;
 }
@@ -1268,8 +1264,9 @@ select{
     margin-bottom: 2rem;
 }
 .shopping_cart__total{
-    padding-top: 1rem;
+    padding: 0.5rem 0;
     border-top: 1px solid #9EC4C5;
+    border-bottom: 1px solid #9EC4C5;
 
     display: flex;
     justify-content: space-between;
@@ -1310,6 +1307,25 @@ select{
 .user-registries--form button:hover,
 .link-btn:hover{
     background-color: #89a1a1;
+}
+.form-group{
+    margin: 1rem 0;
+}
+.form-group textarea{
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid #9EC4C5;
+}
+input[type="text"]{
+    border-radius: 5px;
+    border: 1px solid #9EC4C5;
+}
+.btn--submit{
+    margin: 0.5rem 0;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    color: white;
+    background-color: #9EC4C5;
 }
 /* GOOGLE FONTS IMPORT */
 /* ADOBE FONTS IMPORT */

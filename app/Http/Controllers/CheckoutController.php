@@ -19,7 +19,7 @@ class CheckoutController extends Controller
         // Create new order
         $order = new Order();
         $order->name = $req->name;
-        $order->remarks = 'Execute Order 66';
+        $order->remarks = $req->message;
         $order->total = $total;
         $order->status = 'pending';
 

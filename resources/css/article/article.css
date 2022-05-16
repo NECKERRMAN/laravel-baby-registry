@@ -76,8 +76,9 @@
 }
 
 .shopping_cart__total{
-    padding-top: 1rem;
+    padding: 0.5rem 0;
     border-top: 1px solid #9EC4C5;
+    border-bottom: 1px solid #9EC4C5;
 
     display: flex;
     justify-content: space-between;
