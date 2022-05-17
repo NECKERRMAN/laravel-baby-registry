@@ -103,7 +103,7 @@ class scrapeController extends Controller
         $crawler = $client->request('GET', $req->url);
 
         $articles = $this->scrapeDreamBabyData($crawler);
-        dd($articles);
+
         $product_arr = [];
         foreach ($articles as $article) {
             $product = $this->scrapeDreamBabyProductData($article->url);
@@ -346,7 +346,6 @@ class scrapeController extends Controller
         }
         $article->slug = $url;
         $article->img_src = $crawler->filter('.wp-post-image')->first()->attr('src');
-
         return $article;
     }
 

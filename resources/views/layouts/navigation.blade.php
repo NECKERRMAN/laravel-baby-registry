@@ -8,9 +8,19 @@
                     <x-nav-link :href="route('home')" :active="request()->routeIs('dashboard')">
                         {{ __('Home') }}
                     </x-nav-link>
+
+                    @if (Auth::user()->hasRole('user'))
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    @endif
+                    
+                    @if (Auth::user()->hasRole('admin'))
+                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                        {{ __('Admin dashboard') }}
+                    </x-nav-link>
+                    @endif
+
                     <x-nav-link :href="route('registry.all')" :active="request()->routeIs('registry.all')">
                         {{ ucfirst(__('my_lists')) }}
                     </x-nav-link>

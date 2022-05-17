@@ -26,12 +26,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [PageController::class, 'index'])->name('home');
 Route::get('/dashboard', [PageController::class, 'dashboard'])->middleware(['auth'])->name('dashboard');
 
-//Scrape
-Route::get('/admin/scrape', [scrapeController::class, 'show']);
-Route::post('/scrape/store', [addStoreController::class, 'addStore'])->name('scrape.store');
-Route::post('/scrape/categories', [scrapeController::class, 'scrapeCategories'])->name('scrape.categories');
-Route::post('/scrape/articles', [scrapeController::class, 'scrapeArticles'])->name('scrape.articles');
-
 // User
 Route::get('/my-account', [UserController::class, 'showUserDetails'])->middleware(['auth'])->name('user.account');
 
@@ -58,7 +52,13 @@ Route::post('/visitor/add-article', [ArticleController::class, 'add'])->name('vi
 Route::post('/visitor/clear-cart', [ArticleController::class, 'clear'])->name('visitor.clear');
 Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
 Route::get('/checkout/succes', [CheckoutController::class, 'succes'])->name('checkout.success');
-
 Route::post('/webhooks/mollie', [WebhookController::class, 'handle'])->name('webhooks.mollie');
 
+// Admin
+Route::group(['middleware' => ['auth', 'role:admin']], function(){
+    Route::get('/admin/scrape', [scrapeController::class, 'show']);
+    Route::post('/admin/scrape/store', [addStoreController::class, 'addStore'])->name('scrape.store');
+    Route::post('/admin/scrape/categories', [scrapeController::class, 'scrapeCategories'])->name('scrape.categories');
+    Route::post('/admin/scrape/articles', [scrapeController::class, 'scrapeArticles'])->name('scrape.articles');
+});
 require __DIR__.'/auth.php';
