@@ -11,13 +11,13 @@ class PageController extends Controller
     }
 
     public function dashboard(){
-
+        // hasRole is not defined but works
         if(Auth::user()->hasRole('user')){
             return view('dashboard');
         } elseif(Auth::user()->hasRole('admin')){
             return view('adminDashboard');
         } else {
-            
+
         }
         
     }

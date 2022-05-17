@@ -1,5 +1,5 @@
-<header class="py-2 mb-4">
-    <div class="flex flex-row justify-between page-wrapper items-center border-b-2 border-slate-300">
+<header class="py-4 mb-4 border-b-2 border-slate-300">
+    <div class="flex flex-row justify-between page-wrapper items-center">
       <nav>
         <ul class="flex" data-dropdown-menu="tckp8q-dropdown-menu" role="menubar">
           @guest
@@ -11,10 +11,7 @@
           @endauth
         </ul>
       </nav>
-      <div class="flex flex-col items-center mb-4">
-        <img src="/images/storksie-logo.png" alt="storksie-logo" class="w-20 h-20">
-        <h1>Storksie</h1>
-    </div>
+      @include('components.application-logo-sm')
 
       <div class="flex items-center">
           @auth
