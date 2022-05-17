@@ -7,6 +7,7 @@
           @endguest
           @auth
           <li class="ml-4 {{ (request()->is('/*')) ? 'active' : ''}}" role="menuitem"><a href="/">Home</a></li>
+          <li class="ml-4 {{ (request()->is('/dashboard')) ? 'active' : ''}}" role="menuitem"><a href="{{ route('dashboard') }}">Dashboard</a></li>
           <li class="ml-4" {{ (request()->is('/registry/all')) ? 'active' : ''}}" role="menuitem"><a href="{{ route('registry.all')}}">{{ ucfirst(__('my_lists'))}}</a></li>
           @endauth
         </ul>

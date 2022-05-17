@@ -42,7 +42,7 @@ class RegistryController extends Controller
         $registry->articles = serialize([]);
         $registry->save();
 
-        return redirect()->route('registry.all');
+        return redirect()->route('registry.addArticles', ['id' => $registry->id]);
         
     }
 
@@ -92,7 +92,7 @@ class RegistryController extends Controller
         $current_articles = unserialize($current_registry->articles);
         $new_article = Article::findOrFail($req->article_id);
 
-        if(in_array($new_article, $current_articles)){
+        if(in_array($new_article->id, $current_articles)){
             return redirect()->route('registry.addArticles', ['id' => $current_registry->id])->withErrors(['msg' => 'Item is already added']);
         }
 

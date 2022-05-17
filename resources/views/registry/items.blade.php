@@ -5,8 +5,7 @@
         <h1 class="text-center">{{ucfirst($registry->name)}}</h1>
         <div>
             <div class="flex items-center mb-8">
-                <a class="link-btn" href="{{ url()->previous()}}"> &#8249; Back</a>
-                <p class="ml-4">Let's add some articles</p>
+                <p class="text-sm">Let's add some articles</p>
             </div>
             <div class="flex mt-4">
                 <aside class="mr-4 w-1/5">
