@@ -134,3 +134,8 @@ select {
     position: relative;
 
 }
+
+.registry-list-added li{
+    list-style-type: decimal;
+    list-style-position: inside;
+}

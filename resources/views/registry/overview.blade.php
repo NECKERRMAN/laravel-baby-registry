@@ -8,15 +8,15 @@
     <div class="page-wrapper">
         <h1 class="text-center">{{ucfirst($registry->name)}}</h1>
         <div>
-            <div class="flex items-center mb-8">
+            <div class="flex items-center justify-between mb-8">
                 <a class="link-btn" href="{{ route('registry.all')}}"> &#8249; Back</a>
-                <p class="ml-4">Let's add some articles</p>
+                <a class="link-btn" href="{{ route('registry.addArticles', ['id' => $registry->id ])}}"> Add new articles</a>
             </div>
             <div>
                 <table class="w-full">
                     <thead>
                         <tr class="text-left">
-                            <th width="200" class="py-3">Image</th>
+                            <th width="50" class="py-3">Image</th>
                             <th width="400" class="py-3">{{ __('name')}}</th>
                             <th width="200" class="py-3">Category</th>
                             <th width="50" class="py-3">Action</th>

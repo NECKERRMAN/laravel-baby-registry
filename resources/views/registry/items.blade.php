@@ -10,10 +10,12 @@
             <div class="flex mt-4">
                 <aside class="mr-4 w-1/5">
                     <h3>{{ucfirst(__('current articles')) }}</h3>
-                    @foreach ($current_articles as $curr)
-                    <p>{{ $curr->title }}</p>
-                    @endforeach 
-                    <a href="{{ route('registry.overview', ['id' => $registry->id])}}" class="link-btn">{{__('save')}}</a>
+                    <ul class="registry-list-added">
+                        @foreach ($current_articles as $curr)
+                            <li>{{ $curr->title }}</li>
+                        @endforeach 
+                    </ul>
+                    <a href="{{ route('registry.overview', ['id' => $registry->id])}}" class="link-btn">{{__('overview')}}</a>
                 </aside>
                 <div class=" w-4/5">
                     @include('partials.articles-filter')
@@ -22,7 +24,7 @@
                     @endif
                     <div class="grid md:grid-cols-4 sm:grid-cols-2 lg:gird-cols-4 gap-4 mt-4">
                         @foreach ($articles as $article)
-                            @include('articles.add', ['reg_id' => $registry->id ])
+                            @include('articles.add', ['reg_id' => $registry->id, 'id_array' => $id_array ])
                         @endforeach
                     </div>
                 </div>

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Article;
 use App\Models\Category;
 use App\Models\Registry;
+use Carbon\Carbon;
 use Darryldecode\Cart\Facades\CartFacade as Cart;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
@@ -14,8 +15,7 @@ use stdClass;
 
 class RegistryController extends Controller
 {
-
-
+    // Overview user's registries
     public function index(){
         $user_id = auth()->user()->id;
         $user_registries = Registry::where('user_id', '=', $user_id)->get();
@@ -25,6 +25,7 @@ class RegistryController extends Controller
 
     }
 
+    // Check if current user has access to registry
     private function checkAccess($registry){
         // Check if user has acces
         if(Auth::user()->id !== $registry->user_id){
@@ -34,6 +35,7 @@ class RegistryController extends Controller
         }
     }
 
+    // Create new registry
     public function new(){
         return view('registry.create');
     }
@@ -42,7 +44,10 @@ class RegistryController extends Controller
     public function createRegistry(Request $req){
         $user_id = $req->user_id;
         // Unique slug for the list babyname + userID + birthdate
-        $slug = strtolower($req->babyName) . '-' . $user_id . '-' . $req->birthdate;
+        // Incase user adds space to babyName
+        $baby_name = strtolower(str_replace(' ', '-', $req->babyName));
+        $slug = $baby_name . '-' . $user_id . '-' . $req->birthdate;
+
         $registry = new Registry();
         $registry->user_id = $user_id;
         $registry->name = $req->registryName;
@@ -57,7 +62,7 @@ class RegistryController extends Controller
         
     }
 
-    // edit registry
+    // edit registry page
     public function editRegistry(Request $req){
         
         $registry = Registry::findOrFail($req->id);
@@ -69,12 +74,14 @@ class RegistryController extends Controller
         return view('registry.edit')->with(compact('registry'));
     }
 
+    // Update the edited registry
     public function update(Request $req){
         $user_id = $req->user_id;
         // Unique slug for the list babyname + userID + birthdate
         // Incase user adds space to babyName
         $baby_name = strtolower(str_replace(' ', '-', $req->babyName));
         $slug = $baby_name . '-' . $user_id . '-' . $req->birthdate;
+        $currentTime = Carbon::now();
 
         $registry = Registry::findOrFail($req->id);
         $registry->user_id = $user_id;
@@ -83,6 +90,7 @@ class RegistryController extends Controller
         $registry->birthdate = $req->birthdate;
         $registry->slug = $slug;
         $registry->password = $req->password_registry;
+        $registry->updated_at = $currentTime->toDateTimeString();
         $registry->save();
 
         return view('registry.edit')->with(compact('registry'))->with('success', ucfirst(__('updated')) . '!');
@@ -99,10 +107,17 @@ class RegistryController extends Controller
         $articles = Article::orderBy('price', 'asc')->get();
         $current_articles = $this->getRegistryArticles($registry);
 
+        $current_articles_id_array = [];
+
+        foreach($current_articles as $article){
+            $current_articles_id_array[] = $article->id;
+        };
+
         return view('registry.items', [
             'registry' => $registry,
             'articles' => $articles,
             'current_articles' => $current_articles,
+            'id_array' => $current_articles_id_array,
             'categories' => Category::all()
         ]);
     }
@@ -110,7 +125,7 @@ class RegistryController extends Controller
     // Add article to wishlist
     public function addArticle(Request $req){
         $current_registry = Registry::findOrFail($req->reg_id);
-
+        $current_time = Carbon::now();
         if(!$this->checkAccess($current_registry)){
             return redirect()->route('home')->with('message', 'PROHIBITED!');
         };
@@ -125,6 +140,7 @@ class RegistryController extends Controller
         $current_articles[] = $new_article->id;
 
         $current_registry->articles = serialize($current_articles);
+        $current_registry->updated_at = $current_time->toDateTimeString();
         $current_registry->save();
 
         return redirect()->route('registry.addArticles', ['id' => $current_registry->id]);
