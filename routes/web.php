@@ -30,15 +30,21 @@ Route::get('/dashboard', [PageController::class, 'dashboard'])->middleware(['aut
 Route::get('/my-account', [UserController::class, 'showUserDetails'])->middleware(['auth'])->name('user.account');
 
 //Registry
-Route::prefix('registry')->group(function() {
-    Route::get('all', [RegistryController::class, 'index'])->middleware(['auth'])->name('registry.all');
-    Route::get('{id}/overview', [RegistryController::class, 'showOverview'])->middleware(['auth'])->name('registry.overview');
-    Route::get('new', [RegistryController::class, 'new'])->middleware(['auth'])->name('registry.new');
-    Route::post('new', [RegistryController::class, 'createRegistry'])->middleware(['auth'])->name('registry.create');
-    Route::get('{id}/all-articles', [RegistryController::class, 'allArticles'])->middleware(['auth'])->name('registry.addArticles');
-    Route::get('{id}/filter-articles', [RegistryController::class, 'filterArticles'])->middleware(['auth'])->name('registry.filterArticles');
+// Secured registry routes
+Route::group(['prefix' => 'registry', 'middleware' => 'auth'], function() {
+    Route::get('all', [RegistryController::class, 'index'])->name('registry.all');
+    Route::get('{id}/overview', [RegistryController::class, 'showOverview'])->name('registry.overview');
+    Route::get('new', [RegistryController::class, 'new'])->name('registry.new');
+    Route::post('new', [RegistryController::class, 'createRegistry'])->name('registry.create');
+    Route::post('{id}/update', [RegistryController::class, 'update'])->name('registry.update');
+    Route::get('{id}/all-articles', [RegistryController::class, 'allArticles'])->name('registry.addArticles');
+    Route::get('{id}/filter-articles', [RegistryController::class, 'filterArticles'])->name('registry.filterArticles');
     Route::post('add-article', [RegistryController::class, 'addArticle'])->name('registry.addOne');
-    Route::get('edit/{id}', [RegistryController::class, 'editRegistry'])->middleware(['auth'])->name('registry.edit');
+    Route::get('edit/{id}', [RegistryController::class, 'editRegistry'])->name('registry.edit');
+});
+
+// Unsecured registry routes
+Route::prefix('registry')->group(function() {
     Route::get('{slug}', [RegistryController::class, 'locked'])->name('locked');
     Route::post('{slug}', [RegistryController::class, 'unlocked'])->name('unlocked');
 });
@@ -61,4 +67,5 @@ Route::group(['middleware' => ['auth', 'role:admin']], function(){
     Route::post('/admin/scrape/categories', [scrapeController::class, 'scrapeCategories'])->name('scrape.categories');
     Route::post('/admin/scrape/articles', [scrapeController::class, 'scrapeArticles'])->name('scrape.articles');
 });
+
 require __DIR__.'/auth.php';

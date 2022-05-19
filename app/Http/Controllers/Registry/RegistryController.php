@@ -9,6 +9,7 @@ use App\Models\Registry;
 use Darryldecode\Cart\Facades\CartFacade as Cart;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
+use stdClass;
 
 class RegistryController extends Controller
 {
@@ -47,12 +48,32 @@ class RegistryController extends Controller
     }
 
     // edit registry
-    public function editRegistry(Registry $registry){
-        dd('edit');
+    public function editRegistry(Request $req){
+        $registry = Registry::findOrFail($req->id);
+        return view('registry.edit')->with(compact('registry'));
+    }
+
+    public function update(Request $req){
+        $user_id = $req->user_id;
+        // Unique slug for the list babyname + userID + birthdate
+        // Incase user adds space to babyName
+        $baby_name = strtolower(str_replace(' ', '-', $req->babyName));
+        $slug = $baby_name . '-' . $user_id . '-' . $req->birthdate;
+
+        $registry = Registry::findOrFail($req->id);
+        $registry->user_id = $user_id;
+        $registry->name = $req->registryName;
+        $registry->baby_name = $req->babyName;
+        $registry->birthdate = $req->birthdate;
+        $registry->slug = $slug;
+        $registry->password = $req->password_registry;
+        $registry->save();
+
+        return view('registry.edit')->with(compact('registry'))->with('success', ucfirst(__('updated')) . '!');
     }
 
     // Function to get all current registry articles
-    public function getCurrentArticles($id){
+    private function getCurrentArticles($id){
         $registry = Registry::find($id);
         $registry_articles = unserialize($registry->articles);
 
@@ -60,8 +81,10 @@ class RegistryController extends Controller
 
         foreach($registry_articles as $article){
             $art = Article::find($article);
-
-            $current_articles[] = $art->title;
+            $full_article = new stdClass();
+            $full_article->title = $art->title;
+            $full_article->id = $article;
+            $current_articles[] = $full_article;
         }
 
         return $current_articles;
