@@ -39,3 +39,53 @@
 .link-btn:hover{
     background-color: #89a1a1;
 }
+
+.admin-dashboard__title p{
+    font-size: 2rem;
+    font-weight: 700;
+    color: #9EC4C5;
+}
+
+.admin-dashboard a{
+    display: inline-block;
+}
+
+.admin-dashboard__btn{
+    position: relative;
+    border: 1px solid #9EC4C5;
+    border-radius: 5px;
+    aspect-ratio: 1;
+}
+
+.admin-dashboard__btn div{
+    width: 100%;
+    height: 100%;
+    background-color: #9EC4C5;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: white;
+    font-size: 1.5rem;
+}
+
+.admin-dashboard__btn i{
+    color: white;
+    margin-right: 1rem;
+}
+
+.admin-dashboard__content{
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 20%));
+    gap: 1rem;
+}
+
+@media only screen and (max-width: 750px) {
+    .admin-dashboard__content{
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 50%));
+        gap: 1rem;
+    }
+  }
+
