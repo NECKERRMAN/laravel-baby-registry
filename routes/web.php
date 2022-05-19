@@ -38,6 +38,7 @@ Route::group(['prefix' => 'registry', 'middleware' => 'auth'], function() {
     Route::post('new', [RegistryController::class, 'createRegistry'])->name('registry.create');
     Route::post('{id}/update', [RegistryController::class, 'update'])->name('registry.update');
     Route::get('{id}/all-articles', [RegistryController::class, 'allArticles'])->name('registry.addArticles');
+    Route::post('{id}/delete-article', [RegistryController::class, 'deleteRegistryArticle'])->name('registry.deleteArticle');
     Route::get('{id}/filter-articles', [RegistryController::class, 'filterArticles'])->name('registry.filterArticles');
     Route::post('add-article', [RegistryController::class, 'addArticle'])->name('registry.addOne');
     Route::get('edit/{id}', [RegistryController::class, 'editRegistry'])->name('registry.edit');

@@ -11,7 +11,7 @@
                 <aside class="mr-4 w-1/5">
                     <h3>{{ucfirst(__('current articles')) }}</h3>
                     @foreach ($current_articles as $curr)
-                    <p>{{ $curr }}</p>
+                    <p>{{ $curr->title }}</p>
                     @endforeach 
                     <a href="{{ route('registry.overview', ['id' => $registry->id])}}" class="link-btn">{{__('save')}}</a>
                 </aside>

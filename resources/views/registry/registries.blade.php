@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('page-title')
+    {{ ucfirst(__('all registries'))}}
+@endsection
+
 @section('content')
     <div class="page-wrapper">
         <h1 class="my-4">{{ucfirst(__('welcome'))}} {{ auth()->user()->name}}</h1>
@@ -14,9 +18,9 @@
                     <table class="w-full">
                         <thead>
                             <tr class="text-left">
-                                <th width="200" class="p-3">name</th>
-                                <th width="400" class="p-3">link</th>
-                                <th width="200" class="p-3">actie</th>
+                                <th width="200" class="py-3">{{ __('name')}}</th>
+                                <th width="400" class="py-3">{{ __('link_ff')}}</th>
+                                <th width="200" class="py-3">actie</th>
                             </tr>
                         </thead>
                         <tbody>

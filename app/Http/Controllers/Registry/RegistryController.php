@@ -72,24 +72,6 @@ class RegistryController extends Controller
         return view('registry.edit')->with(compact('registry'))->with('success', ucfirst(__('updated')) . '!');
     }
 
-    // Function to get all current registry articles
-    private function getCurrentArticles($id){
-        $registry = Registry::find($id);
-        $registry_articles = unserialize($registry->articles);
-
-        $current_articles[] = '';
-
-        foreach($registry_articles as $article){
-            $art = Article::find($article);
-            $full_article = new stdClass();
-            $full_article->title = $art->title;
-            $full_article->id = $article;
-            $current_articles[] = $full_article;
-        }
-
-        return $current_articles;
-    }
-
     // Get all articles
     public function allArticles(Request $req){
         $registry = Registry::find($req->id);
@@ -99,7 +81,7 @@ class RegistryController extends Controller
         }
         
         $articles = Article::orderBy('price', 'asc')->get();
-        $current_articles = $this->getCurrentArticles($req->id);
+        $current_articles = $this->getRegistryArticles($registry);
 
         return view('registry.items', [
             'registry' => $registry,
@@ -205,6 +187,41 @@ class RegistryController extends Controller
                     'cart' => $cart
             ]);
         }
+    }
+
+    // Delete specific article from registry
+    public function deleteRegistryArticle(Request $req){
+        // Get Registry and Article Id
+        $registry = Registry::findOrFail($req->id);
+        $article_id = $req->article_id;
+        // Get the current Articles
+        $current_articles = $this->getRegistryArticles($registry);
+        // Loop over current articles and find the article_id
+        foreach($current_articles as $key => $article){
+            foreach($article as $valueKey => $value){
+                if($valueKey == 'id' && $value == $article_id){
+                    // delete the article
+                    unset($current_articles[$key]);
+                }
+            }
+        }
+        // New array to push id's in
+        $newArray = [];
+        foreach($current_articles as $article){
+            $newArray[] = $article->id;
+        }
+
+        // Create serialized array with article id's
+        $registry->articles = serialize($newArray);
+        $registry->save();
+        // Get the updated array for the view
+        $updated = $this->getRegistryArticles($registry);
+
+        return view('registry.overview', [
+            'registry' => $registry,
+            'articles' => $updated
+        ]);
+
     }
 
     private function getRegistryArticles($registry){

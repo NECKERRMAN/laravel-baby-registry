@@ -3,7 +3,11 @@
     <td>{{ $article->title }}</td>
     <td>{{ $article->category->title }}</td>
     <td>
-        <a class="link-btn" href="#">Delete</a>
+        <form method="POST" action="{{ route('registry.deleteArticle', ['id' => $registry_id])}}" >
+            @csrf
+            <input type="hidden" name="article_id" value="{{ $article->id}}">
+            <button type="submit">delete</button>
+        </form>
     </td>
     <td>
         <p class="text-red-500"></p>

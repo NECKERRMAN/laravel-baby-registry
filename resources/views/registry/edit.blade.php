@@ -6,6 +6,7 @@
 
 @section('content')
     <div class="page-wrapper">
+        <a class="link-btn mb-4" href="{{ route('registry.all')}}">{{ __('back')}}</a>
         <h1> {{ ucfirst(__('edit registry'))}}</h1>
         <div>
             @include('registry.form', [

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Articles;
 use App\Http\Controllers\Controller;
 use App\Models\Article;
 use App\Models\Category;
+use App\Models\Registry;
 use App\Models\Store;
 use Darryldecode\Cart\Facades\CartFacade as Cart;
 use Illuminate\Http\Request;

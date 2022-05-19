@@ -5,7 +5,7 @@
         <h1 class="text-center">{{ucfirst($registry->name)}}</h1>
         <div>
             <div class="flex items-center mb-8">
-                <a class="link-btn" href="{{ url()->previous()}}"> &#8249; Back</a>
+                <a class="link-btn" href="{{ route('registry.all')}}"> &#8249; Back</a>
                 <p class="ml-4">Let's add some articles</p>
             </div>
             <div>
@@ -21,7 +21,7 @@
                     </thead>
                     <tbody>
                         @foreach ($articles as $article)
-                            @include('registry.overview-item')
+                            @include('registry.overview-item', ['registry_id' => $registry->id])
                         @endforeach
                     </tbody>
                 </table>
