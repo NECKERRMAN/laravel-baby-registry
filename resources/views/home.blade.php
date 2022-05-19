@@ -8,6 +8,9 @@
     <img src="/images/storksie-logo.png" alt="storksie-logo" class="w-20 h-20">
   </div>
   <div class="banner__content">
+    @if(!empty($message))
+        <div class="text-red-500"> {{ $message }}</div>
+    @endif
     <h2>Waarom kiezen voor Storksie?</h2>
     <ul class="italic">
       <li>Geen zorgen meer bij het opstellen van een geboortelijst</li>

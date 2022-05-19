@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 class UserController extends Controller
 {
     public function showUserDetails(){
-        $user = auth()->user();
+        $user = Auth::user();
         dd($user);
     }
 }

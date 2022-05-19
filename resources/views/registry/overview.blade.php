@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('page-title')
+    {{ ucfirst(__('overview'))}}
+@endsection
+
 @section('content')
     <div class="page-wrapper">
         <h1 class="text-center">{{ucfirst($registry->name)}}</h1>
@@ -12,11 +16,11 @@
                 <table class="w-full">
                     <thead>
                         <tr class="text-left">
-                            <th width="200" class="p-3">Image</th>
-                            <th width="400" class="p-3">Name</th>
-                            <th width="200" class="p-3">Category</th>
-                            <th width="50" class="p-3">Action</th>
-                            <th width="50" class="p-3">Status</th>
+                            <th width="200" class="py-3">Image</th>
+                            <th width="400" class="py-3">{{ __('name')}}</th>
+                            <th width="200" class="py-3">Category</th>
+                            <th width="50" class="py-3">Action</th>
+                            <th width="50" class="py-3">Status</th>
                         </tr>
                     </thead>
                     <tbody>

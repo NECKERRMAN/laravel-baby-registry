@@ -9,6 +9,7 @@ use App\Models\Registry;
 use Darryldecode\Cart\Facades\CartFacade as Cart;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use stdClass;
 
 class RegistryController extends Controller
@@ -22,6 +23,15 @@ class RegistryController extends Controller
             'registries' => $user_registries,
         ]);
 
+    }
+
+    private function checkAccess($registry){
+        // Check if user has acces
+        if(Auth::user()->id !== $registry->user_id){
+            return false;
+        } else {
+            return true;
+        }
     }
 
     public function new(){
@@ -49,7 +59,13 @@ class RegistryController extends Controller
 
     // edit registry
     public function editRegistry(Request $req){
+        
         $registry = Registry::findOrFail($req->id);
+
+        if(!$this->checkAccess($registry)){
+            return redirect()->route('home')->with('message', 'PROHIBITED!');
+        };
+
         return view('registry.edit')->with(compact('registry'));
     }
 
@@ -75,11 +91,11 @@ class RegistryController extends Controller
     // Get all articles
     public function allArticles(Request $req){
         $registry = Registry::find($req->id);
-        // Check if user has acces
-        if(auth()->user()->id !== $registry->user_id){
-            return redirect()->back();
-        }
-        
+
+        if(!$this->checkAccess($registry)){
+            return redirect()->route('home')->with('message', 'PROHIBITED!');
+        };
+
         $articles = Article::orderBy('price', 'asc')->get();
         $current_articles = $this->getRegistryArticles($registry);
 
@@ -94,6 +110,11 @@ class RegistryController extends Controller
     // Add article to wishlist
     public function addArticle(Request $req){
         $current_registry = Registry::findOrFail($req->reg_id);
+
+        if(!$this->checkAccess($current_registry)){
+            return redirect()->route('home')->with('message', 'PROHIBITED!');
+        };
+
         $current_articles = unserialize($current_registry->articles);
         $new_article = Article::findOrFail($req->article_id);
 
@@ -114,6 +135,11 @@ class RegistryController extends Controller
         $category_id = '';
         $articles = '';
         $registry = Registry::find($req->id);
+
+        if(!$this->checkAccess($registry)){
+            return redirect()->route('home')->with('message', 'PROHIBITED!');
+        };
+
         $current_articles = $this->getCurrentArticles($req->id);
 
         // Filter on category
@@ -148,6 +174,10 @@ class RegistryController extends Controller
 
     public function showOverview(Request $req){
         $registry = Registry::find($req->id);
+
+        if(!$this->checkAccess($registry)){
+            return redirect()->route('home')->with('message', 'PROHIBITED!');
+        };
         $articles = $this->getRegistryArticles($registry);
 
         return view('registry.overview', [
@@ -193,6 +223,11 @@ class RegistryController extends Controller
     public function deleteRegistryArticle(Request $req){
         // Get Registry and Article Id
         $registry = Registry::findOrFail($req->id);
+
+        if(!$this->checkAccess($registry)){
+            return redirect()->route('home')->with('message', 'PROHIBITED!');
+        };
+
         $article_id = $req->article_id;
         // Get the current Articles
         $current_articles = $this->getRegistryArticles($registry);

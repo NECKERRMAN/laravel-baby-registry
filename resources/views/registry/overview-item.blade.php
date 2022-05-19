@@ -6,7 +6,7 @@
         <form method="POST" action="{{ route('registry.deleteArticle', ['id' => $registry_id])}}" >
             @csrf
             <input type="hidden" name="article_id" value="{{ $article->id}}">
-            <button type="submit">delete</button>
+            <button class="p-2 bg-red-500 rounded text-white" type="submit">delete</button>
         </form>
     </td>
     <td>
