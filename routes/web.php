@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\addStoreController;
 use App\Http\Controllers\Admin\scrapeController;
 use App\Http\Controllers\Articles\ArticleController;
+use App\Http\Controllers\Category\CategoryController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\Registry\RegistryController;
@@ -63,11 +64,14 @@ Route::post('/webhooks/mollie', [WebhookController::class, 'handle'])->name('web
 
 // Admin
 Route::group(['middleware' => ['auth', 'role:admin']], function(){
-    Route::get('/admin/scrape', [scrapeController::class, 'show']);
+    Route::get('/admin/scrape', [scrapeController::class, 'show'])->name('admin.scrape');
     Route::post('/admin/scrape/store', [addStoreController::class, 'addStore'])->name('scrape.store');
     Route::post('/admin/scrape/categories', [scrapeController::class, 'scrapeCategories'])->name('scrape.categories');
     Route::post('/admin/scrape/articles', [scrapeController::class, 'scrapeArticles'])->name('scrape.articles');
     Route::get('/admin/articles', [ArticleController::class, 'all'])->name('admin.articles');
+    Route::get('/admin/users', [UserController::class, 'all'])->name('admin.users');
+    Route::get('/admin/registries', [RegistryController::class, 'all'])->name('admin.registries');
+    Route::get('/admin/categories', [CategoryController::class, 'all'])->name('admin.categories');
     Route::post('/admin/articles', [ArticleController::class, 'delete'])->name('admin.deleteArticle');
 });
 

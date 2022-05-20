@@ -25,6 +25,12 @@ class RegistryController extends Controller
 
     }
 
+    // All registries for Admin
+    public function all(){
+        $registries = Registry::all();
+        dd($registries);
+    }
+
     // Check if current user has access to registry
     private function checkAccess($registry){
         // Check if user has acces
