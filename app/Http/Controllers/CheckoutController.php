@@ -22,6 +22,9 @@ class CheckoutController extends Controller
         $order->remarks = $req->message;
         $order->total = $total;
         $order->status = 'pending';
+        $order->registry_id = $req->registry_id;
+        // TO DO: add articles!
+        $order->articles = '';
 
         // Save order in DB
         $order->save();
@@ -30,7 +33,7 @@ class CheckoutController extends Controller
         $webhookUrl = route('webhooks.mollie');
 
         if(App::environment('local')) {
-            $webhookUrl = 'https://3ab5-2a02-1811-ec8c-100-640f-a4f7-7676-97b3.eu.ngrok.io/webhooks/mollie';
+            $webhookUrl = 'https://7cdd-2a02-1811-ec8c-100-c91b-c4f3-d06a-ce59.eu.ngrok.io/webhooks/mollie';
         }
 
         Log::alert('Before Mollie Checkout total price is calculated');

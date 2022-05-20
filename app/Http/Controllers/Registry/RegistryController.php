@@ -162,7 +162,12 @@ class RegistryController extends Controller
             return redirect()->route('home')->with('message', 'PROHIBITED!');
         };
 
-        $current_articles = $this->getCurrentArticles($req->id);
+        $current_articles = $this->getRegistryArticles($registry);
+        $current_articles_id_array = [];
+
+        foreach($current_articles as $article){
+            $current_articles_id_array[] = $article->id;
+        };
 
         // Filter on category
         if($req->filter_categories !== 'all'){
@@ -190,6 +195,7 @@ class RegistryController extends Controller
             'registry' => $registry,
             'articles' => $articles,
             'current_articles' => $current_articles,
+            'id_array' => $current_articles_id_array,
             'categories' => Category::all()
         ]);
     }
@@ -211,13 +217,22 @@ class RegistryController extends Controller
     public function locked(Request $req){
         $reg_slug = $req->slug;
         $registry = Registry::where('slug', '=', $reg_slug)->first();
-        $articles = $this->getRegistryArticles($registry);
+        $articles = '';
+        if($registry !== null){
+
+            $articles = $this->getRegistryArticles($registry);
+        }
 
         $cart = Cart::session(1);
+        $cart_array = [];
+        foreach($cart->getContent() as $key => $value){
+            $cart_array[] = $key;
+        }
 
         return view('registry.visitor', [
                 'registry' => $registry,
                 'articles' => $articles,
+                'cart_array' => $cart_array,
                 'cart' => $cart
         ]);
     }

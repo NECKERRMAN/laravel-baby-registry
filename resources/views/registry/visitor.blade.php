@@ -26,12 +26,13 @@
                     <label class="block" for="message">{{ ucfirst(__('your message'))}}</label>
                     <textarea type="text" name="message" id="message" placeholder="E.g. {{ ucfirst(__('congratulations'))}}" required></textarea>
                 </div>
+                <input type="hidden" name="registry_id" value="{{ $registry->id }}">
                 <button type="submit" class="btn--submit">Betalen</button>
             </form>
         </div>
         <div class="grid md:grid-cols-4 sm:grid-cols-2 lg:gird-cols-4 gap-4 my-4">
             @foreach ($articles as $article)
-                @include('articles.article-card')
+                @include('articles.article-card', ['check_array' => $cart_array])
             @endforeach
         </div>
     </div>
