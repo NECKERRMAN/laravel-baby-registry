@@ -19,6 +19,13 @@ class ArticleController extends Controller
         ]);
     }
 
+    public function all(){
+        return view('articles.admin', [
+            'articles' => Article::all(),
+            'categories' => Category::all(),
+        ]);
+    }
+
     public function getArticle(Request $req){
         $article_id = $req->id;
         $article = Article::find($article_id);
@@ -51,5 +58,11 @@ class ArticleController extends Controller
         Cart::session(1)->clear();
         return redirect()->back();
 
+    }
+
+    public function delete(Request $req){
+        $article_id = $req->article_id;
+        $delete_article = Article::find($article_id)->delete();
+        return redirect()->back();
     }
 }

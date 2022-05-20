@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('page-title')
-    Articles
+    Admin Articles
 @endsection
 
 @section('content')
@@ -23,7 +23,7 @@
 
         <div class="grid md:grid-cols-4 sm:grid-cols-2 gap-4">
             @foreach ($articles as $article)
-                @include('articles.article-card')
+                @include('articles.admin-card')
             @endforeach
         </div>
     </div>
