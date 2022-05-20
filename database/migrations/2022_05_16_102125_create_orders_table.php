@@ -19,6 +19,8 @@ return new class extends Migration
             $table->text('remarks');
             $table->float('total');
             $table->string('status')->default('pending');
+            $table->foreignId('registry_id')->constrained('registries');
+            $table->string('articles');
             $table->timestamps();
         });
     }

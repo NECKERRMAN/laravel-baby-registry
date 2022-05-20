@@ -81,6 +81,30 @@
     gap: 1rem;
 }
 
+.admin-dashboard__overview{
+    padding: 1rem;
+    border: 1px solid #9EC4C5;
+    background-color: white;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.admin-dashboard__overview i{
+    font-size: 3rem;
+    margin: 0 2rem;
+    cursor: none;
+}
+
+.admin-dashboard__overview p{
+    font-weight: 700;
+    color: #9EC4C5;
+}
+
 @media only screen and (max-width: 750px) {
     .admin-dashboard__content{
         display: grid;

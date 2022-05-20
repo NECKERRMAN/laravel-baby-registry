@@ -12,4 +12,8 @@ class Registry extends Model
     public function articles(){
         return $this->hasMany(Article::class);
     }
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }   
 }

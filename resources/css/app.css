@@ -11,19 +11,24 @@
 /* ADOBE FONTS IMPORT */
 @import url("https://use.typekit.net/vrh3ltm.css");
 
+h1{
+    font-size: 2rem;
+    font-weight: 700;
+    color: #9EC4C5;
+}
 
-h1, h2, h3{
-    font-family: 'pauline', sans-serif;;
+h2, h3{
+    font-family: 'pauline', sans-serif;
     font-size: 150%;
     font-weight: 700;
 }
 
-h1, h2, h3{
+h2, h3{
     position: relative;
     margin-bottom: 1rem;
 }
 
-h1::after, h2::after, h3::after{
+h2::after, h3::after{
     content: '';
     display: block;
     position: absolute;

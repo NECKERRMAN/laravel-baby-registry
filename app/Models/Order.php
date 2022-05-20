@@ -12,4 +12,8 @@ class Order extends Model
     public function articles(){
         return $this->hasMany(Article::class);
     }
+
+    public function registry(){
+        return $this->belongsTo(Registry::class);
+    }
 }

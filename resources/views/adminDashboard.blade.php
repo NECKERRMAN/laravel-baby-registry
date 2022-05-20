@@ -14,6 +14,14 @@
             <div class="admin-dashboard__title mb-4">
                 <p>Admin dashboard</p>
             </div>
+            <div class="admin-dashboard__overview">
+                <div>
+                    <p>{{ ucfirst(__('number of users')) }}: {{ $n_users }}</p>
+                    <p>{{ ucfirst(__('number of articles')) }}: {{ $n_art }}</p>
+                    <p>{{ ucfirst(__('number of registries')) }}: {{ $n_reg }}</p>
+                </div>
+                <i class="fa-solid fa-arrow-trend-up"></i>
+            </div>
             <div class="admin-dashboard__content">
                 <a class="admin-dashboard__btn" href="{{ route('admin.scrape') }}">
                     <div>
