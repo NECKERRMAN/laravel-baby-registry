@@ -14,7 +14,7 @@
             @if (count($registries) < 1)
             <p class="mb-4">{{ ucfirst(__('no registries yet')) }}</p>
             @else
-                <div class="mb-4">
+                <div class="mb-4 xs:overflow-x-scroll overflow-auto">
                     <table class="w-full">
                         <thead>
                             <tr class="text-left">
@@ -27,10 +27,10 @@
                             @foreach ($registries as $registry)
                             <tr class="m-4">
                                 <td>{{ $registry->name }}</td>
-                                <td>http://www.storksie.be/{{ $registry->slug }}</td>
+                                <td>storksie.be/{{ $registry->slug }}</td>
                                 <td>
-                                    <a class="link-btn inline-block" href="{{ route('registry.edit', $registry->id )}}">Edit</a>
-                                    <a class="link-btn inline-block" href="{{ route('registry.overview', $registry->id )}}">Overview</a>
+                                    <a class="link-btn inline-block" href="{{ route('registry.edit', $registry->id )}}">{{ ucfirst(__('edit')) }}</a>
+                                    <a class="link-btn inline-block" href="{{ route('registry.overview', $registry->id )}}">{{ ucfirst(__('overview')) }}</a>
                                 </td>
                             </tr>
                             @endforeach

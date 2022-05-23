@@ -14,11 +14,11 @@
                     <p class="article__product-code">{{ $article->product_code }}</p>
                     <p class="article__price">€{{ sprintf("%.2f", $article->price) }}</p>
                     <div class="article__description">
-                        <p>{{ ucfirst(__('product description:')) }}</p>
+                        <p>{{ ucfirst(__('article description')) }}:</p>
                         {{ $article->description }}
                     </div>
                     <div class="article__store">
-                        <p>{{ ucfirst(__('Available at:')) }}</p>
+                        <p>{{ ucfirst(__('available at')) }}:</p>
                         {{ $store->name }}
                     </div>
                     <div class="article__button">

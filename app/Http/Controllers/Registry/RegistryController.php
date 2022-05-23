@@ -110,7 +110,7 @@ class RegistryController extends Controller
             return redirect()->route('home')->with('message', 'PROHIBITED!');
         };
 
-        $articles = Article::orderBy('price', 'asc')->get();
+        $articles = Article::orderBy('price', 'asc')->paginate(20);
         $current_articles = $this->getRegistryArticles($registry);
 
         $current_articles_id_array = [];
@@ -176,17 +176,17 @@ class RegistryController extends Controller
             if($req->priceRange === 'high-low'){
                 $articles = Article::where('category_id', '=', $category_id)
                     ->orderBy('price', 'desc')
-                    ->get();
+                    ->paginate(20);
             } else {
                 $articles = Article::where('category_id', '=', $category_id)
                 ->orderBy('price', 'asc')
-                ->get();
+                ->paginate(20);
             }
         } else {
             if($req->priceRange === 'high-low'){
-                $articles = Article::orderBy('price', 'desc')->get();
+                $articles = Article::orderBy('price', 'desc')->paginate(20);
             } else {
-                $articles = Article::orderBy('price', 'asc')->get();
+                $articles = Article::orderBy('price', 'asc')->paginate(20);
             }
         }
         
@@ -301,16 +301,19 @@ class RegistryController extends Controller
         $articles = [];
 
         foreach(unserialize($reg_articles) as $key => $article_id){
-            $article = Article::find($article_id);
+                $article = Article::find($article_id);
 
-            $articles[] = [
-                'id' => $article->id, 
-                'title' => $article->title, 
-                'slug' => $article->slug, 
-                'img_src' => $article->img_src, 
-                'price' => $article->price,
-                'category' => Category::find($article->category_id)
-            ];
+                if($article !== null){
+                    $articles[] = [
+                        'id' => $article->id, 
+                        'title' => $article->title, 
+                        'slug' => $article->slug, 
+                        'img_src' => $article->img_src, 
+                        'price' => $article->price,
+                        'category' => Category::find($article->category_id)
+                    ];
+                }
+
         }
 
         // Set array to object
