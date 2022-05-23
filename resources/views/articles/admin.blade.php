@@ -25,6 +25,10 @@
             @foreach ($articles as $article)
                 @include('articles.admin-card')
             @endforeach
+
         </div>
+       <div class="my-4">
+        {{ $articles->links() }}
+       </div>
     </div>
 @endsection

@@ -21,7 +21,7 @@ class ArticleController extends Controller
 
     public function all(){
         return view('articles.admin', [
-            'articles' => Article::all(),
+            'articles' => Article::paginate(20),
             'categories' => Category::all(),
         ]);
     }
