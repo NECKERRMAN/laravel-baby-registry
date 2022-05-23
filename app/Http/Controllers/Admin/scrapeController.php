@@ -27,7 +27,7 @@ class scrapeController extends Controller
         $this->checkAdmin();
 
         $shops = [
-            'dreambaby' => 'Dreambaby',
+            'babyco' => 'Babyenco',
             'ikea' => 'Ikea Baby',
             'ptitchou' => 'P\'Tit Chou'
         ];
@@ -39,8 +39,8 @@ class scrapeController extends Controller
 
     public function scrapeCategories(Request $req){
         switch($req->shop){
-            case 'dreambaby':
-                $this->scrapeDreamBabyCategories($req->url);
+            case 'babyco':
+                $this->scrapeBabyCoCategories($req->url);
                 break;
             case 'ikea':
                 $this->scrapeIkeaCategories($req->url);
@@ -53,8 +53,8 @@ class scrapeController extends Controller
 
     public function scrapeArticles(Request $req){
         switch($req->shop){
-            case 'dreambaby':
-                return $this->scrapeDreambabyArticles($req);
+            case 'babyenco':
+                return $this->scrapeBabyCoArticles($req);
                 break;
             case 'ikea':
                 $this->scrapeIkeaArticles($req);
@@ -65,19 +65,20 @@ class scrapeController extends Controller
         }
     }
 
-    private function scrapeDreamBabyCategories($url){
+    private function scrapeBabyCoCategories($url){
         $client = new Client();
         $crawler = $client->request('GET', $url);
         // #categories_block_left .block_content
-        $categories = $crawler->filter('.content .content_section .section_list ul li a')
+        $categories = $crawler->filter('#search_filters > aside:nth-child(1) .facet-type-checkbox li')
             ->each(function($node){
-                $title = $node->filter('.facetCountContainer .facetName')->text();
-                $url = $node->attr('href');
+                $title = $node->filter('a')->text();
+                $url = $node->filter('a')->attr('href');
 
                 $cat = new stdClass();
-                $cat->title = $title;
+                // Title contains number of products -> remove with mb_substr
+                $cat->title = mb_substr($title, 0, -5);
                 $cat->url = $url;
-                $cat->store_name = 'dreambaby';
+                $cat->store_name = 'babyenco';
                 $cat->store_id = 1;
                 return $cat; 
             });
@@ -98,15 +99,15 @@ class scrapeController extends Controller
         }    
     }
 
-    private function scrapeDreambabyArticles($req){
+    private function scrapeBabyCoArticles($req){
         $client = new Client();
         $crawler = $client->request('GET', $req->url);
 
-        $articles = $this->scrapeDreamBabyData($crawler);
+        $articles = $this->scrapeBabyCoData($crawler);
 
         $product_arr = [];
         foreach ($articles as $article) {
-            $product = $this->scrapeDreamBabyProductData($article->url);
+            $product = $this->scrapeBabyCoProductData($article->url);
             $product_arr[] = $product;
         }
 
@@ -114,7 +115,7 @@ class scrapeController extends Controller
             $exists = Article::where('slug', $item->slug)->count();
             if($exists > 0) continue;
 
-            $image_link = $this->storeImage($item, 'dreambaby');
+            $image_link = $this->storeImage($item, 'babyenco');
 
             // Create or add category to db
             $articleEntity = new Article();
@@ -126,32 +127,34 @@ class scrapeController extends Controller
             $articleEntity->img_src = $item->img_src;
             $articleEntity->img_int = $image_link;
             $articleEntity->category_id = $req->category_id;
-            $articleEntity->store_id = 3;
+            $articleEntity->store_id = 1;
             $articleEntity->save();
         }
 
-        return view('scrape.scrape-result')->with(compact('articles'));
+        return view('scrape.scrape-result')->with(compact('product_arr'));
     }
 
-    private function scrapeDreamBabyData($crawler){
-       return $crawler->filter('.product')->each(function($node){
+    private function scrapeBabyCoData($crawler){
+       return $crawler->filter('div.js-product-miniature-wrapper')->each(function($node){
             $article = new stdClass();
-            $article->url = $node->filter('.product_info a')->attr('href');
+            $article->url = $node->filter('article.product-miniature div.thumbnail-container a')->attr('href');
               return $article;
         });
     }
 
-    private function scrapeDreamBabyProductData($url){
+    private function scrapeBabyCoProductData($url){
         $client = new Client();
         $crawler = $client->request('GET', $url);
+        // Created here to use substr to remove the euro sign
+        $price = $crawler->filter('#col-product-info > div.product_header_container.clearfix > div.product-prices.js-product-prices > div:nth-child(3) > div > span > span')->text();
 
         $article = new stdClass();
-        $article->title = $crawler->filter('.top.namePartPriceContainer h1.main_header')->text();
-        $article->product_code = $crawler->filter('.top.namePartPriceContainer .sku')->text();
-        $article->price = $crawler->filter('.product_price .price .value')->text();
-        $article->description = $crawler->filter('.product_text')->text();
+        $article->title = $crawler->filter('#col-product-info > div.product_header_container.clearfix > h1 > span')->text();
+        $article->product_code = $crawler->filter('#col-product-info > div.product_header_container.clearfix > div.product-prices.js-product-prices > div.product-reference > span')->text();
+        $article->price = floatval(substr($price, 5));
+        $article->description = $crawler->filter('.product-information .rte-content.product-description')->text();
         $article->slug = $url;
-        $article->img_src = $crawler->filter('.image_container #productMainImage')->first()->attr('src');
+        $article->img_src = $crawler->filter('#product-images-large > div.swiper-wrapper > div.product-lmage-large > img')->first()->attr('content');
 
         return $article;
     }
