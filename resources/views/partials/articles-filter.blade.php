@@ -7,15 +7,15 @@
                     <select name="filter_categories" id="filter_categories">
                             <option value="all">All</option>
                         @foreach ($categories as $category)
-                            <option value="{{ $category->id }}">{{ $category->title }}</option>
+                            <option {{ request()->filter_categories == $category->id ? 'selected' : '' }} value="{{ $category->id }}">{{ $category->title }}</option>
                         @endforeach
                     </select>
                 </div>
                 <div class="flex flex-col ml-4">
                     <label for="priceRange">Price range</label>
                     <select name="priceRange" id="priceRange">
-                        <option value="high-low">Highest first</option>
-                        <option value="low-hig">Lowest first</option>
+                        <option {{ request()->priceRange == 'high-low' ? 'selected' : '' }} value="high-low">Highest first</option>
+                        <option {{ request()->priceRange == 'low-hig' ? 'selected' : '' }} value="low-hig">Lowest first</option>
                     </select>
                 </div>
                 <button type="submit" class="link-btn ml-4">Filter</button>

@@ -1072,6 +1072,8 @@ Ensure the default browser behavior of the `hidden` attribute.
     border-radius: 5px;
     color: white;
     background-color: #9EC4C5;
+}.user-registries--form{
+    margin: 1rem 0;
 }/* ADOBE FONTS IMPORT */h1{
     font-size: 2rem;
     font-weight: 700;

@@ -1,7 +1,7 @@
 @extends('layouts.visitor')
 
 @section('content')
-    <div class="page-wrapper">
+    <div>
         <h1 class="my-4 text-center">{{ucfirst(__($registry->name))}}</h1>
         <div class="shopping_cart">
             <h3>{{ ucfirst(__('shopping cart'))}}</h3>
@@ -27,7 +27,7 @@
                     <textarea type="text" name="message" id="message" placeholder="E.g. {{ ucfirst(__('congratulations'))}}" required></textarea>
                 </div>
                 <input type="hidden" name="registry_id" value="{{ $registry->id }}">
-                <button type="submit" class="btn--submit">Betalen</button>
+                <button type="submit" class="btn--submit">{{ ucfirst(__('pay'))}}</button>
             </form>
         </div>
         <div class="grid md:grid-cols-4 sm:grid-cols-2 lg:gird-cols-4 gap-4 my-4">

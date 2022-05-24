@@ -25,7 +25,7 @@
                 <div class="py-2 w-full">
                     <div class="w-1/2">
                         <label class="block" for="url">
-                            Collection URL
+                            Collection URL (corresponding to webshop!)
                         </label>
                         <input class="w-full rounded border-[#9EC4C5] border-1" type="url" name="url" id="url" placeholder="e.g. https://babyenco.be/nl/baby-s-feestmaaltijd">
                     </div>

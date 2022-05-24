@@ -21,9 +21,12 @@
                     </x-nav-link>
                     @endif
 
+                    @if (Auth::user()->hasRole('user'))
                     <x-nav-link :href="route('registry.all')" :active="request()->routeIs('registry.all')">
                         {{ ucfirst(__('my_lists')) }}
                     </x-nav-link>
+                    @endif
+
                 </div>
             </div>
 

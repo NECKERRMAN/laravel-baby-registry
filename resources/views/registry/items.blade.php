@@ -29,7 +29,7 @@
                         @endforeach
                     </div>
                     <div class="my-4">
-                        {{ $articles->links() }}
+                        {{ $articles->appends(request()->query())->links() }}
                     </div>
                 </div>
             </div>
