@@ -12,7 +12,7 @@
                     <h3>{{ucfirst(__('current articles')) }}</h3>
                     <ul class="registry-list-added">
                         @foreach ($current_articles as $article)
-                            <li>{{ $article->title }}</li>
+                            <li>{{ $article['name'] }}</li>
                         @endforeach 
                     </ul>
                     <a href="{{ route('registry.overview', ['id' => $registry->id])}}" class="link-btn">{{__('overview')}}</a>

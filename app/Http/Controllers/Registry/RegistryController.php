@@ -13,6 +13,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use stdClass;
 
+use function PHPUnit\Framework\isEmpty;
+
 class RegistryController extends Controller
 {
     // Overview user's registries
@@ -61,7 +63,7 @@ class RegistryController extends Controller
         $registry->birthdate = $req->birthdate;
         $registry->slug = $slug;
         $registry->password = $req->password_registry;
-        $registry->articles = serialize([]);
+        $registry->articles = [];
         $registry->save();
 
         return redirect()->route('registry.addArticles', ['id' => $registry->id]);
@@ -111,13 +113,14 @@ class RegistryController extends Controller
         };
 
         $articles = Article::orderBy('price', 'asc')->paginate(20);
-        $current_articles = $this->getRegistryArticles($registry);
+
+        $current_articles = $registry->articles;
 
         $current_articles_id_array = [];
 
-        foreach($current_articles as $article){
-            $current_articles_id_array[] = $article->id;
-        };
+        foreach($registry->articles as $article){
+            $current_articles_id_array[] = $article['id'];
+        }
 
         return view('registry.items', [
             'registry' => $registry,
@@ -132,20 +135,32 @@ class RegistryController extends Controller
     public function addArticle(Request $req){
         $current_registry = Registry::findOrFail($req->reg_id);
         $current_time = Carbon::now();
+
         if(!$this->checkAccess($current_registry)){
             return redirect()->route('home')->with('message', 'PROHIBITED!');
         };
-
-        $current_articles = unserialize($current_registry->articles);
+        
         $new_article = Article::findOrFail($req->article_id);
 
-        if(in_array($new_article->id, $current_articles)){
+        $articles = $current_registry->articles;
+        $articles_id = [];
+
+        foreach($articles as $article){
+            $articles_id[] = $article['id'];
+        }
+
+        if(in_array($new_article->id, $articles_id)){
             return redirect()->route('registry.addArticles', ['id' => $current_registry->id])->withErrors(['msg' => 'Item is already added']);
         }
 
-        $current_articles[] = $new_article->id;
+        $articles[] = [
+            'id' => $new_article->id,
+            'name' => $new_article->title,
+            'status' => 0
+        ];
 
-        $current_registry->articles = serialize($current_articles);
+        $current_registry->articles = $articles;
+
         $current_registry->updated_at = $current_time->toDateTimeString();
         $current_registry->save();
 
@@ -162,11 +177,11 @@ class RegistryController extends Controller
             return redirect()->route('home')->with('message', 'PROHIBITED!');
         };
 
-        $current_articles = $this->getRegistryArticles($registry);
+        $current_articles = $registry->articles;
         $current_articles_id_array = [];
 
         foreach($current_articles as $article){
-            $current_articles_id_array[] = $article->id;
+            $current_articles_id_array[] = $article['id'];
         };
 
         // Filter on category
@@ -206,7 +221,16 @@ class RegistryController extends Controller
         if(!$this->checkAccess($registry)){
             return redirect()->route('home')->with('message', 'PROHIBITED!');
         };
-        $articles = $this->getRegistryArticles($registry);
+        $registry_articles = $registry->articles;
+
+        $articles = [];
+
+        foreach($registry_articles as $article){
+            $art = Article::find($article['id']);
+
+            $articles[] = [$art, 'status' => $article['status']];
+
+        }
 
         return view('registry.overview', [
                 'registry' => $registry,
@@ -267,7 +291,7 @@ class RegistryController extends Controller
 
         $article_id = $req->article_id;
         // Get the current Articles
-        $current_articles = $this->getRegistryArticles($registry);
+        $current_articles = $registry->articles;
         // Loop over current articles and find the article_id
         foreach($current_articles as $key => $article){
             foreach($article as $valueKey => $value){
@@ -277,17 +301,20 @@ class RegistryController extends Controller
                 }
             }
         }
-        // New array to push id's in
-        $newArray = [];
-        foreach($current_articles as $article){
-            $newArray[] = $article->id;
-        }
+        
 
         // Create serialized array with article id's
-        $registry->articles = serialize($newArray);
+        $registry->articles = $current_articles;
         $registry->save();
         // Get the updated array for the view
-        $updated = $this->getRegistryArticles($registry);
+        $updated = [];
+
+        foreach($current_articles as $article){
+            $art = Article::find($article['id']);
+
+            $updated[] = [$art, 'status' => $article['status']];
+
+        }
 
         return view('registry.overview', [
             'registry' => $registry,

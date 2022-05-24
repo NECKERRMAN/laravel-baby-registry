@@ -21,7 +21,7 @@ return new class extends Migration
             $table->date('birthdate');
             $table->string('slug');
             $table->string('password');
-            $table->string('articles');
+            $table->text('articles');
             $table->timestamps();
         });
     }
