@@ -27,12 +27,6 @@ class RegistryController extends Controller
 
     }
 
-    // All registries for Admin
-    public function all(){
-        $registries = Registry::all();
-        dd($registries);
-    }
-
     // Check if current user has access to registry
     private function checkAccess($registry){
         // Check if user has acces
@@ -284,7 +278,10 @@ class RegistryController extends Controller
     public function deleteRegistryArticle(Request $req){
         // Get Registry and Article Id
         $registry = Registry::findOrFail($req->id);
+        // Get current date with carbon
+        $current_time = Carbon::now();
 
+        // CHeck users access
         if(!$this->checkAccess($registry)){
             return redirect()->route('home')->with('message', 'PROHIBITED!');
         };
@@ -301,10 +298,11 @@ class RegistryController extends Controller
                 }
             }
         }
-        
 
-        // Create serialized array with article id's
+        // Save new array of articles
         $registry->articles = $current_articles;
+
+        $registry->updated_at = $current_time->toDateTimeString();
         $registry->save();
         // Get the updated array for the view
         $updated = [];
@@ -323,6 +321,7 @@ class RegistryController extends Controller
 
     }
 
+    /* TO BE REMOVED */
     private function getRegistryArticles($registry){
         $reg_articles = $registry->articles;
         $articles = [];

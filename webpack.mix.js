@@ -17,4 +17,8 @@ mix.js('resources/js/app.js', 'public/js').postCss(
     require('postcss-import'),
     require('tailwindcss'),
     require('autoprefixer'),
-]);
+]).sourceMaps().version();
+
+mix.browserSync({
+    proxy: "http://127.0.0.1:8000/",
+});

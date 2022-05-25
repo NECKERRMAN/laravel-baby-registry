@@ -3,6 +3,7 @@
         <p class="card__title">{{ $article->title }}</p>
         <p> {{ ucfirst(__('article code')) }}: <strong>{{ $article->product_code }}</strong></p>
         <p> {{ ucfirst(__('article store')) }}: {{ $article->store->name }}</p>
+        <p> {{ ucfirst(__('category')) }}: {{ $article->category->title }}</p>
         <p> {{ ucfirst(__('price')) }}: € {{ sprintf("%.2f", $article->price) }}</p>
         <div class="flex items-center mt-4">
             <a class="link-btn mr-4" href="{{ route('articles.article', ['id' =>  $article->id ])}}">{{ ucfirst(__('detail')) }}</a>

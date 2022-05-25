@@ -6,7 +6,7 @@
 
 @section('content')
     <div class="page-wrapper">
-        <div class="flex justify-center items-center my-4">
+        <div class="flex my-4">
             <div class="category__select flex flex-col items-start mr-8">
                 <label for="category" class="my-2">Categorie:</label>
             <select name="category" id="category" class="rounded-md">
@@ -15,9 +15,6 @@
                 <option value="{{ $category->id }}">{{ $category->title }}</option>
                 @endforeach
             </select>
-            </div>
-            <div class="filter__select">
-                <label for="filter">Filter</label>
             </div>
         </div>
 

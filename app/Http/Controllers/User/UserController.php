@@ -9,11 +9,6 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-    public function all(){
-        $users = User::all();
-        dd($users);
-    }
-
     public function showUserDetails(){
         $user = Auth::user();
         dd($user);
