@@ -16,4 +16,9 @@ class Order extends Model
     public function registry(){
         return $this->belongsTo(Registry::class);
     }
+
+
+    protected $casts = [
+        'articles' => 'array'
+    ];
 }

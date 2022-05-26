@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\sendOrderConfirmation;
 use App\Models\Order;
+use App\Models\Registry;
 use Darryldecode\Cart\Facades\CartFacade as Cart;
 use Mollie\Laravel\Facades\Mollie;
 use Illuminate\Http\Request;
@@ -18,14 +19,15 @@ class CheckoutController extends Controller
         $cart = Cart::session(1);
         $total = (string) $cart->getTotal();
 
+        // Create new order
+        $order = new Order();
+
         // Get content
-        $articles = [];
+        $articles = $order->articles;
         foreach($cart->getContent() as $key => $value){
             $articles[] = $key;
         }
 
-        // Create new order
-        $order = new Order();
         $order->name = $req->name;
         $order->remarks = $req->message;
         $order->email = $req->email;
@@ -33,7 +35,10 @@ class CheckoutController extends Controller
         $order->status = 'pending';
         $order->registry_id = $req->registry_id;
         // TO DO: add articles!
-        $order->articles = '';
+        $order->articles = $articles;
+
+        // Update the registry
+        $this->setStatus($req->registry_id, $articles);
 
         // Save order in DB
         $order->save();
@@ -71,7 +76,21 @@ class CheckoutController extends Controller
     }
 
     public function succes(Request $req){
-
         return view('pages.succes', ['name' => $req->order_from]);
+    }
+
+    private function setStatus($registry_id, $order){
+        $registry = Registry::findOrFail($registry_id);
+
+        $articles = $registry->articles;
+
+        foreach($articles as $key => $value){
+            if(in_array($value['id'], $order)){
+                $articles[$key]['status'] = 1;
+            }
+        }
+
+        $registry->articles = $articles;
+        $registry->save();
     }
 }
