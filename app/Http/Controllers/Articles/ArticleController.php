@@ -19,9 +19,19 @@ class ArticleController extends Controller
         ]);
     }
 
-    public function all(){
+    public function all(Request $req){
+        $category_id = $req->category;
+        dd($req);
+
+        $articles = Article::orderBy('price', 'asc')->paginate(20);
+        if($category_id == 0){
+            $articles = Article::orderBy('price', 'asc')->paginate(20);
+        } else {
+            $articles = Article::where('category_id', '=', $category_id)->paginate(20);
+        }
+
         return view('articles.admin', [
-            'articles' => Article::orderBy('price', 'asc')->paginate(20),
+            'articles' => $articles,
             'categories' => Category::all(),
         ]);
     }

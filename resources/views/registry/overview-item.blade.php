@@ -3,18 +3,23 @@
     <td>{{ $article[0]->title }}</td>
     <td>{{ $article[0]->category->title }}</td>
     <td>
+        {{-- IF item is not bought -> can be deleted --}}
+        @if ($article['status'] == 0)
         <form method="POST" action="{{ route('registry.deleteArticle', ['id' => $registry_id])}}" >
             @csrf
             <input type="hidden" name="article_id" value="{{ $article[0]->id}}">
             <button class="p-2 bg-red-500 rounded text-white" type="submit">{{ ucfirst(__('delete')) }}</button>
         </form>
+        @else
+        <button class="p-2 bg-red-500 opacity-25 rounded text-white cursor-default	" type="button">{{ ucfirst(__('delete')) }}</button>
+        @endif
     </td>
     <td>
         <p class="text-red-500">
             @if ($article['status'] == 0)
-                NO
+               {{ ucfirst(__('available'))}}
             @else
-                <p class="text-green-400">YES</p>
+                <p class="text-green-400">{{ ucfirst(__('bought'))}}</p>
             @endif
         </p>
     </td>
