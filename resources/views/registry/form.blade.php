@@ -31,5 +31,5 @@
     @if(!empty($success))
         <div class="text-green-500"> {{ $success }}</div>
     @endif
-    <button type="submit">{{ ucfirst(__('save'))}}</button>
+        <button type="submit">{{ ucfirst(__('save'))}}</button>
 </form>

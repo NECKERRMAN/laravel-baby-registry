@@ -105,11 +105,4 @@
     color: #9EC4C5;
 }
 
-@media only screen and (max-width: 750px) {
-    .admin-dashboard__content{
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 50%));
-        gap: 1rem;
-    }
-  }
 

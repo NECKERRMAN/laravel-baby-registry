@@ -22,7 +22,7 @@
                 </div>
                 <i class="fa-solid fa-arrow-trend-up"></i>
             </div>
-            <div class="admin-dashboard__content">
+            <div class="grid lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 gap-4">
                 <a class="admin-dashboard__btn" href="{{ route('admin.scrape') }}">
                     <div>
                         <i class="fa-solid fa-magnifying-glass-arrow-right"></i>

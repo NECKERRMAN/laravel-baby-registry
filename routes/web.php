@@ -38,6 +38,8 @@ Route::group(['prefix' => 'registry', 'middleware' => 'auth'], function() {
     Route::get('{id}/overview', [RegistryController::class, 'showOverview'])->name('registry.overview');
     Route::get('new', [RegistryController::class, 'new'])->name('registry.new');
     Route::post('new', [RegistryController::class, 'createRegistry'])->name('registry.create');
+    // Only user can delete own registry ( + admin)
+    Route::post('delete', [UserController::class, 'deleteRegistry'])->name('registry.delete');
     Route::post('{id}/update', [RegistryController::class, 'update'])->name('registry.update');
     Route::get('{id}/all-articles', [RegistryController::class, 'allArticles'])->name('registry.addArticles');
     Route::post('{id}/delete-article', [RegistryController::class, 'deleteRegistryArticle'])->name('registry.deleteArticle');
@@ -47,7 +49,7 @@ Route::group(['prefix' => 'registry', 'middleware' => 'auth'], function() {
 });
 
 // Unsecured registry routes
-Route::prefix('registry')->group(function() {
+Route::group(['prefix' => 'registry'], function() {
     Route::get('{slug}', [RegistryController::class, 'locked'])->name('locked');
     Route::post('{slug}', [RegistryController::class, 'unlocked'])->name('unlocked');
 });

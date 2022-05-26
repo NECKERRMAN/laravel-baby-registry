@@ -16,6 +16,12 @@ class CheckoutController extends Controller
         $cart = Cart::session(1);
         $total = (string) $cart->getTotal();
 
+        // Get content
+        $articles = [];
+        foreach($cart->getContent() as $key => $value){
+            $articles[] = $key;
+        }
+
         // Create new order
         $order = new Order();
         $order->name = $req->name;
@@ -24,7 +30,7 @@ class CheckoutController extends Controller
         $order->status = 'pending';
         $order->registry_id = $req->registry_id;
         // TO DO: add articles!
-        $order->articles = '';
+        $order->articles = $articles;
 
         // Save order in DB
         $order->save();
@@ -46,7 +52,7 @@ class CheckoutController extends Controller
                 "value" => $total // You must send the correct number of decimals, thus we enforce the use of strings
             ],
             "description" => "Bestelling op " . date('d-m-Y h:i'),
-            "redirectUrl" => route('checkout.success'),
+            "redirectUrl" => route('checkout.success', ['order_from' => $order->name]),
             "webhookUrl" => $webhookUrl,
             "metadata" => [
                 "order_id" => $order->id,
@@ -58,7 +64,8 @@ class CheckoutController extends Controller
         return redirect($payment->getCheckoutUrl(), 303);
     }
 
-    public function succes(){
-        return 'Jouw bestelling is goed ontvangen';
+    public function succes(Request $req){
+        dd($req->order_from);
+        return view('pages.succes', ['name' => $req->order_from]);
     }
 }

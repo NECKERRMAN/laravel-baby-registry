@@ -235,10 +235,14 @@ class RegistryController extends Controller
     public function locked(Request $req){
         $reg_slug = $req->slug;
         $registry = Registry::where('slug', '=', $reg_slug)->first();
-        $articles = '';
+        $articles = [];
         if($registry !== null){
 
-            $articles = $this->getRegistryArticles($registry);
+            $registry_articles = $registry->articles;
+            foreach($registry_articles as $article){
+                $art = Article::find($article['id']);
+                $articles[] = [$art, 'status' => $article['status']];
+            }
         }
 
         $cart = Cart::session(1);
@@ -262,13 +266,26 @@ class RegistryController extends Controller
         if($req->secret_password === $registry->password){
             $reg_slug = $req->slug;
             $registry = Registry::where('slug', '=', $reg_slug)->first();
-            $articles = $this->getRegistryArticles($registry);
+            $articles = [];
+            if($registry !== null){
+    
+                $registry_articles = $registry->articles;
+                foreach($registry_articles as $article){
+                    $art = Article::find($article['id']);
+                    $articles[] = [$art, 'status' => $article['status']];
+                }
+            }
     
             $cart = Cart::session(1);
+            $cart_array = [];
+            foreach($cart->getContent() as $key => $value){
+                $cart_array[] = $key;
+            }
     
             return view('registry.visitor', [
                     'registry' => $registry,
                     'articles' => $articles,
+                    'cart_array' => $cart_array,
                     'cart' => $cart
             ]);
         }
