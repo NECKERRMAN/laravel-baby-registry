@@ -1,4 +1,8 @@
-@extends('layouts.main')
+@extends('layouts.app')
+
+@section('page-title')
+  {{ ucfirst(__('home'))}}
+@endsection
 
 @section('content')
 <div class="banner">
@@ -23,7 +27,7 @@
   <a href="/login" class="text-sm text-center text-gray-700 dark:text-gray-500 rounded px-4 my-2 py-2 border-2	border-gray-700">{{ __('new_list')}}</a>
   @endauth
   @guest
-  <a href="/login" class="text-sm text-center text-gray-700 dark:text-gray-500 rounded px-4 my-2 py-2 border-2	border-gray-700">Login</a>
+  <a href="/login" class="text-sm text-center text-gray-700 dark:text-gray-500 rounded px-4 my-2 py-2 border-2	border-gray-700">{{ strtoupper(__('Login'))}}</a>
   <p class="m-2">Of</p>
   <a href="/register" class="m-2 text-sm text-gray-700 dark:text-gray-500 underline">{{ ucfirst(__('new_account'))}}</a>
   @endguest

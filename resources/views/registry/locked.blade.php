@@ -10,6 +10,7 @@
 @section('content')
     <div class="flex flex-col items-center">
         <h2 class="mb-2 mt-8">{{ucfirst(__('registry_password'))}}</h2>
+        {{-- TO DO ! --}}
         <form action="#" method="POST" class="flex flex-col">
             @csrf
             <input type="hidden" name="reg_id" value="1">

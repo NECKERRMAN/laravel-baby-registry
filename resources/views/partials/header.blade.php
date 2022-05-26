@@ -7,8 +7,18 @@
           @endguest
           @auth
           <li class="ml-4 {{ (request()->is('/*')) ? 'active' : ''}}" role="menuitem"><a href="/">Home</a></li>
-          <li class="ml-4 {{ (request()->is('/dashboard')) ? 'active' : ''}}" role="menuitem"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-          <li class="ml-4" {{ (request()->is('/registry/all')) ? 'active' : ''}}" role="menuitem"><a href="{{ route('registry.all')}}">{{ ucfirst(__('my_lists'))}}</a></li>
+          @if (Auth::user()->hasRole('user'))
+            <li class="ml-4 {{ (request()->is('/dashboard')) ? 'active' : ''}}" role="menuitem"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+            <li class="ml-4" {{ (request()->is('/registry/all')) ? 'active' : ''}}" role="menuitem"><a href="{{ route('registry.all')}}">{{ ucfirst(__('my_lists'))}}</a></li>    
+          @endif
+
+                              
+          @if (Auth::user()->hasRole('admin'))
+          <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+              {{ __('Admin dashboard') }}
+          </x-nav-link>
+          @endif
+
           @endauth
         </ul>
       </nav>
