@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\sendOrderConfirmation;
 use App\Models\Order;
 use Darryldecode\Cart\Facades\CartFacade as Cart;
 use Mollie\Laravel\Facades\Mollie;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class CheckoutController extends Controller
 {
@@ -26,25 +28,27 @@ class CheckoutController extends Controller
         $order = new Order();
         $order->name = $req->name;
         $order->remarks = $req->message;
+        $order->email = $req->email;
         $order->total = $total;
         $order->status = 'pending';
         $order->registry_id = $req->registry_id;
         // TO DO: add articles!
-        $order->articles = $articles;
+        $order->articles = '';
 
         // Save order in DB
         $order->save();
-
+        // Send email to user
+        Mail::to($req->email)->send(new sendOrderConfirmation($order));
         // Webhook logic, accessible from online env
         $webhookUrl = route('webhooks.mollie');
 
         if(App::environment('local')) {
-            $webhookUrl = 'https://7cdd-2a02-1811-ec8c-100-c91b-c4f3-d06a-ce59.eu.ngrok.io/webhooks/mollie';
+            $webhookUrl = 'https://8730-2a02-1811-ec8c-100-a570-d7ea-670-3a0e.eu.ngrok.io/webhooks/mollie';
         }
 
         Log::alert('Before Mollie Checkout total price is calculated');
 
-        $total = number_format($total, 2);
+        $total = str_replace(',', '', number_format($total, 2));
 
         $payment = Mollie::api()->payments->create([
             "amount" => [
@@ -56,16 +60,18 @@ class CheckoutController extends Controller
             "webhookUrl" => $webhookUrl,
             "metadata" => [
                 "order_id" => $order->id,
-                "order_from" => $order->name
+                "order_from" => $order->name,
+                "order_email" => $order->email
             ],
         ]);
+
     
         // redirect customer to Mollie checkout page
         return redirect($payment->getCheckoutUrl(), 303);
     }
 
     public function succes(Request $req){
-        dd($req->order_from);
+
         return view('pages.succes', ['name' => $req->order_from]);
     }
 }

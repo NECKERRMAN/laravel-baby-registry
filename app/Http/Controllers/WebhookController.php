@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\sendOrderConfirmation;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Mollie\Laravel\Facades\Mollie;
 
 class WebhookController extends Controller
@@ -17,11 +19,11 @@ class WebhookController extends Controller
         $payment = Mollie::api()->payments->get($request->id);
 
         if ($payment->isPaid() && ! $payment->hasRefunds() && ! $payment->hasChargebacks()) {
-
             $order_id = $payment->metadata->order_id;
             $order = Order::findOrFail($order_id);
             $order->status = 'paid';
             $order->save();
+
 
             Log::alert('Betaling is gelukt');
 

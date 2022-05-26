@@ -16,11 +16,12 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('email');
             $table->text('remarks');
             $table->float('total');
             $table->string('status')->default('pending');
             $table->foreignId('registry_id')->constrained('registries');
-            $table->string('articles');
+            $table->array('articles');
             $table->timestamps();
         });
     }

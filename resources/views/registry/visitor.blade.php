@@ -26,6 +26,10 @@
                     <label class="block" for="message">{{ ucfirst(__('your message'))}}</label>
                     <textarea type="text" name="message" id="message" placeholder="E.g. {{ ucfirst(__('congratulations'))}}" required></textarea>
                 </div>
+                <div class="form-group">
+                    <label class="block" for="email">{{ ucfirst(__('your email'))}}</label>
+                    <input type="email" name="email" id="email" placeholder="E.g. {{ ucfirst(__('saul@goodman.be'))}}" required></input>
+                </div>
                 <input type="hidden" name="registry_id" value="{{ $registry->id }}">
                 <button type="submit" class="btn--submit">{{ ucfirst(__('pay'))}}</button>
             </form>
