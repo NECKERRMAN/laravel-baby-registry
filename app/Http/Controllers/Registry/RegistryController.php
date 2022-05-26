@@ -100,21 +100,43 @@ class RegistryController extends Controller
 
     // Get all articles
     public function allArticles(Request $req){
+        $articles = Article::orderBy('price', 'asc')->paginate(20);
         $registry = Registry::find($req->id);
 
         if(!$this->checkAccess($registry)){
             return redirect()->route('home')->with('message', 'PROHIBITED!');
         };
 
-        $articles = Article::orderBy('price', 'asc')->paginate(20);
-
         $current_articles = $registry->articles;
-
         $current_articles_id_array = [];
 
-        foreach($registry->articles as $article){
+        foreach($current_articles as $article){
             $current_articles_id_array[] = $article['id'];
+        };
+
+        if($req->price && $req->category){
+                // Filter on category
+            if($req->category !== '0'){
+                $category_id = $req->category;
+                // Filter on price
+                if($req->price === 'high-low'){
+                    $articles = Article::where('category_id', '=', $category_id)
+                        ->orderBy('price', 'desc')
+                        ->paginate(20);
+                } else {
+                    $articles = Article::where('category_id', '=', $category_id)
+                    ->orderBy('price', 'asc')
+                    ->paginate(20);
+                }
+            } else {
+                if($req->price === 'high-low'){
+                    $articles = Article::orderBy('price', 'desc')->paginate(20);
+                } else {
+                    $articles = Article::orderBy('price', 'asc')->paginate(20);
+                }
+            }
         }
+        
 
         return view('registry.items', [
             'registry' => $registry,
@@ -124,7 +146,7 @@ class RegistryController extends Controller
             'categories' => Category::all()
         ]);
     }
-    
+
     // Add article to wishlist
     public function addArticle(Request $req){
         $current_registry = Registry::findOrFail($req->reg_id);
@@ -160,53 +182,6 @@ class RegistryController extends Controller
 
         return redirect()->route('registry.addArticles', ['id' => $current_registry->id]);
 
-    }
-
-    public function filterArticles(Request $req){
-        $category_id = '';
-        $articles = '';
-        $registry = Registry::find($req->id);
-
-        if(!$this->checkAccess($registry)){
-            return redirect()->route('home')->with('message', 'PROHIBITED!');
-        };
-
-        $current_articles = $registry->articles;
-        $current_articles_id_array = [];
-
-        foreach($current_articles as $article){
-            $current_articles_id_array[] = $article['id'];
-        };
-
-        // Filter on category
-        if($req->filter_categories !== 'all'){
-            $category_id = $req->filter_categories;
-            // Filter on price
-            if($req->priceRange === 'high-low'){
-                $articles = Article::where('category_id', '=', $category_id)
-                    ->orderBy('price', 'desc')
-                    ->paginate(20);
-            } else {
-                $articles = Article::where('category_id', '=', $category_id)
-                ->orderBy('price', 'asc')
-                ->paginate(20);
-            }
-        } else {
-            if($req->priceRange === 'high-low'){
-                $articles = Article::orderBy('price', 'desc')->paginate(20);
-            } else {
-                $articles = Article::orderBy('price', 'asc')->paginate(20);
-            }
-        }
-        
-
-        return view('registry.items', [
-            'registry' => $registry,
-            'articles' => $articles,
-            'current_articles' => $current_articles,
-            'id_array' => $current_articles_id_array,
-            'categories' => Category::all()
-        ]);
     }
 
     public function showOverview(Request $req){
