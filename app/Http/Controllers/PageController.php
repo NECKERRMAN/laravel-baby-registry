@@ -9,16 +9,20 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class PageController extends Controller
-{
+{   
+    // Get home page
     public function index(){
         return view('home');
-    }
+    }  
 
+    // Return the correct dashboard
     public function dashboard(){
+        // Get data for Admin dashboard
         $articles = count(Article::all());
         $users = count(User::all());
         $registries = count(Registry::all());
-        // hasRole is not defined but works
+        // hasRole gives error 'not defined' but works...
+        // If user is user return dashboard
         if(Auth::user()->hasRole('user')){
             return view('dashboard');
         } elseif(Auth::user()->hasRole('admin')){
@@ -28,12 +32,8 @@ class PageController extends Controller
                 'n_reg' => $registries
             ]);
         } else {
-
+            return abort(404);
         }
         
-    }
-
-    public function test(){
-        return 'Admin- test';
-    }
+    } 
 }

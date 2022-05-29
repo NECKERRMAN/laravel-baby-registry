@@ -69,7 +69,7 @@ Route::group(['middleware' => ['auth', 'role:admin']], function(){
     Route::post('/admin/scrape/store', [addStoreController::class, 'addStore'])->name('scrape.store');
     Route::post('/admin/scrape/categories', [scrapeController::class, 'scrapeCategories'])->name('scrape.categories');
     Route::post('/admin/scrape/articles', [scrapeController::class, 'scrapeArticles'])->name('scrape.articles');
-    Route::get('/admin/articles', [ArticleController::class, 'all'])->name('admin.articles');
+    Route::get('/admin/articles', [AdminController::class, 'articles'])->name('admin.articles');
     Route::get('/admin/users', [AdminController::class, 'users'])->name('admin.users');
     Route::get('/admin/registries', [AdminController::class, 'registries'])->name('admin.registries');
     Route::get('/admin/categories', [AdminController::class, 'categories'])->name('admin.categories');

@@ -34,10 +34,9 @@ class CheckoutController extends Controller
         $order->total = $total;
         $order->status = 'pending';
         $order->registry_id = $req->registry_id;
-        // TO DO: add articles!
         $order->articles = $articles;
 
-        // Update the registry
+        // Update the registry with status and customer
         $this->setStatus($req->registry_id, $articles, $req->name);
 
         // Save order in DB
@@ -75,10 +74,12 @@ class CheckoutController extends Controller
         return redirect($payment->getCheckoutUrl(), 303);
     }
 
+    // Return succes page
     public function succes(Request $req){
         return view('pages.succes', ['name' => $req->order_from]);
     }
-
+    
+    // Update the registry with status and customer
     private function setStatus($registry_id, $order, $customer){
         $registry = Registry::findOrFail($registry_id);
 

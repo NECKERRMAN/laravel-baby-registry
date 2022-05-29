@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+    // Get all categories
     public function all(){
         $categories = Category::all();
         dd($categories);

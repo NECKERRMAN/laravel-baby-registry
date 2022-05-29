@@ -187,7 +187,28 @@ tbody tr:nth-child(even){
     background-color: #9ec4c534;
 }
 
+.admin_filter{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.admin_filter__select{
+    display: flex;
+    align-items: center;
+}
+
 @media(max-width: 650px){
+    
+    .admin_filter__select{
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .admin_filter__select button{
+        width: 100%;
+        margin: 0.5rem 0;
+    }
     .overview__main{
         flex-direction: column;
     }

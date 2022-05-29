@@ -42,7 +42,7 @@ class RegistryController extends Controller
         return view('registry.create');
     }
 
-    // Save registry
+    // Save registry to DB
     public function createRegistry(Request $req){
         $user_id = $req->user_id;
         // Unique slug for the list babyname + userID + birthdate
@@ -57,6 +57,7 @@ class RegistryController extends Controller
         $registry->birthdate = $req->birthdate;
         $registry->slug = $slug;
         $registry->password = $req->password_registry;
+        // Set articles to an empty array
         $registry->articles = [];
         $registry->save();
 
@@ -66,7 +67,7 @@ class RegistryController extends Controller
 
     // edit registry page
     public function editRegistry(Request $req){
-        
+        // Get correct registry
         $registry = Registry::findOrFail($req->id);
 
         if(!$this->checkAccess($registry)){
@@ -100,20 +101,23 @@ class RegistryController extends Controller
 
     // Get all articles
     public function allArticles(Request $req){
+        // Get all articles and correct registry
         $articles = Article::orderBy('price', 'asc')->paginate(20);
         $registry = Registry::find($req->id);
 
         if(!$this->checkAccess($registry)){
             return redirect()->route('home')->with('message', 'PROHIBITED!');
         };
-
+        // Get current registry articles
         $current_articles = $registry->articles;
+        // Create empty array to store id's -> used to check if already added
         $current_articles_id_array = [];
-
+        // Loop over articles and add id to array
         foreach($current_articles as $article){
             $current_articles_id_array[] = $article['id'];
         };
 
+        // Filters based on get
         if($req->price && $req->category){
                 // Filter on category
             if($req->category !== '0'){
@@ -156,26 +160,30 @@ class RegistryController extends Controller
             return redirect()->route('home')->with('message', 'PROHIBITED!');
         };
         
+        // Get the added article
         $new_article = Article::findOrFail($req->article_id);
-
+        // Get all articles from the current registry
         $articles = $current_registry->articles;
+        // Empy array for id's
         $articles_id = [];
-
+        // Loop over the articles and add id
         foreach($articles as $article){
             $articles_id[] = $article['id'];
         }
-
+        // Check if it's not already added
         if(in_array($new_article->id, $articles_id)){
             return redirect()->route('registry.addArticles', ['id' => $current_registry->id])->withErrors(['msg' => 'Item is already added']);
         }
-
+        // Create JSON object to store in array
         $articles[] = [
             'id' => $new_article->id,
             'name' => $new_article->title,
+            // Status 0 -> not bought
             'status' => 0,
+            // Ordered by is blank
             "ordered_by" => '-'
         ];
-
+        // Save data to current registry
         $current_registry->articles = $articles;
 
         $current_registry->updated_at = $current_time->toDateTimeString();
@@ -185,25 +193,29 @@ class RegistryController extends Controller
 
     }
 
+    // Overview of registry articels
     public function showOverview(Request $req){
         $registry = Registry::find($req->id);
 
         if(!$this->checkAccess($registry)){
             return redirect()->route('home')->with('message', 'PROHIBITED!');
         };
+        // Get all registry articles
         $registry_articles = $registry->articles;
-
+        // Empty array to store combined data
         $articles = [];
+        // Total price set to 0
         $total = 0;
+        // Loop over articles
         foreach($registry_articles as $article){
             $art = Article::find($article['id']);
-
+            // Add full article, status and customer name to array
             $articles[] = [$art, 'status' => $article['status'], 'ordered_by' => $article['ordered_by']];
+            // Update total price
             if($article['status'] === 1 ){
                 $total += $art->price;
             }
         }
-
 
         return view('registry.overview', [
                 'registry' => $registry,
@@ -211,6 +223,7 @@ class RegistryController extends Controller
                 'total' => $total
         ]);
     }
+
 
     public function locked(Request $req){
         $reg_slug = $req->slug;
@@ -317,32 +330,5 @@ class RegistryController extends Controller
             'articles' => $updated
         ]);
 
-    }
-
-    /* TO BE REMOVED */
-    private function getRegistryArticles($registry){
-        $reg_articles = $registry->articles;
-        $articles = [];
-
-        foreach(unserialize($reg_articles) as $key => $article_id){
-                $article = Article::find($article_id);
-
-                if($article !== null){
-                    $articles[] = [
-                        'id' => $article->id, 
-                        'title' => $article->title, 
-                        'slug' => $article->slug, 
-                        'img_src' => $article->img_src, 
-                        'price' => $article->price,
-                        'category' => Category::find($article->category_id)
-                    ];
-                }
-
-        }
-
-        // Set array to object
-        return array_map(function($array){
-                        return (object)$array;
-                    }, $articles);
     }
 }

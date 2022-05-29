@@ -8,36 +8,43 @@ use App\Models\Category;
 use Goutte\Client;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 use stdClass;
 
 class scrapeController extends Controller
 {
-
-    public function checkAdmin(){
-        $user_role = auth()->user()->user_role;
-
+    // Function to check if user is an Admin
+    private function checkAdmin(){
+        // Get current user role
+        $user_role = Auth::user()->user_role;
+        // If role != 1 (ADMIN) return back
         if($user_role !== 1){
             return redirect()->back();
         }
     }
 
+    // Show the scrape fields/ page
     public function show(){
         $this->checkAdmin();
 
+        // Set shops and keys
         $shops = [
             'babyco' => 'Babyenco',
             'ikea' => 'Ikea Baby',
             'ptitchou' => 'P\'Tit Chou'
         ];
 
+        // Get all categories
         $allCategories = Category::all();
 
         return view('scrape.scrape-form', compact('shops', 'allCategories'));
     }
 
+    // Scrape categories
     public function scrapeCategories(Request $req){
+        // Switch based on shops with correct scraper
         switch($req->shop){
             case 'babyco':
                 $this->scrapeBabyCoCategories($req->url);
@@ -51,7 +58,9 @@ class scrapeController extends Controller
         }
     }
 
+    // Scrape articles
     public function scrapeArticles(Request $req){
+        // Switch based on shops with correct scraper
         switch($req->shop){
             case 'babyenco':
                 return $this->scrapeBabyCoArticles($req);
@@ -65,10 +74,12 @@ class scrapeController extends Controller
         }
     }
 
+    // 1. Baby and Co
+    // Scrape categories
     private function scrapeBabyCoCategories($url){
         $client = new Client();
         $crawler = $client->request('GET', $url);
-        // #categories_block_left .block_content
+
         $categories = $crawler->filter('#search_filters > aside:nth-child(1) .facet-type-checkbox li')
             ->each(function($node){
                 $title = $node->filter('a')->text();
@@ -99,25 +110,32 @@ class scrapeController extends Controller
         }    
     }
 
+    // SCrape the articles and get correct url for every product
     private function scrapeBabyCoArticles($req){
         $client = new Client();
         $crawler = $client->request('GET', $req->url);
 
+        // Scrape the page for every article url
         $articles = $this->scrapeBabyCoData($crawler);
 
-        $product_arr = [];
+        // Empty array to store the articles in
+        $article_arr = [];
+        // Loop over articles 
         foreach ($articles as $article) {
-            $product = $this->scrapeBabyCoProductData($article->url);
-            $product_arr[] = $product;
+            // Go to detail page and fetch data
+            $art = $this->scrapeBabyCoProductData($article->url);
+            // FIll array with data
+            $article_arr[] = $art;
         }
 
-        foreach ($product_arr as $item) {
+        // Loop over the article array 
+        foreach ($article_arr as $item) {
             $exists = Article::where('slug', $item->slug)->count();
             if($exists > 0) continue;
-
+            // Store the image in the storage
             $image_link = $this->storeImage($item, 'babyenco');
 
-            // Create or add category to db
+            // Create or add article to db
             $articleEntity = new Article();
             $articleEntity->title = $item->title;
             $articleEntity->slug = $item->slug;
@@ -133,7 +151,7 @@ class scrapeController extends Controller
 
         return view('scrape.scrape-result')->with(compact('product_arr'));
     }
-
+    // Scrape the page for the article url
     private function scrapeBabyCoData($crawler){
        return $crawler->filter('div.js-product-miniature-wrapper')->each(function($node){
             $article = new stdClass();
@@ -142,10 +160,11 @@ class scrapeController extends Controller
         });
     }
 
+    // Get the article details
     private function scrapeBabyCoProductData($url){
         $client = new Client();
         $crawler = $client->request('GET', $url);
-        // Created here to use substr to remove the euro sign
+        // Created here to use substr to remove the hardcoded euro sign
         $price = $crawler->filter('#col-product-info > div.product_header_container.clearfix > div.product-prices.js-product-prices > div:nth-child(3) > div > span > span')->text();
 
         $article = new stdClass();
@@ -161,11 +180,12 @@ class scrapeController extends Controller
 
 
 
-    // IKEA
+    // 2. IKEA
+    // Scrape the page categories
     private function scrapeIkeaCategories($url){
         $client = new Client();
         $crawler = $client->request('GET', $url);
-        // #categories_block_left .block_content
+
         $categories = $crawler->filter('.plp-navigation-slot-wrapper .vn-carousel .vn__wrapper .vn__nav a')
             ->each(function($node){
                 $title = $node->filter('.vn__nav__title')->text();
@@ -178,6 +198,7 @@ class scrapeController extends Controller
                 $cat->store_id = 2;
                 return $cat; 
             });
+        // Loop over the categories to store in DB
         foreach($categories as $scrapeCategory){
             // Does it yet exist? 
             $exists = Category::where('url', $scrapeCategory->url)->count();
@@ -197,23 +218,27 @@ class scrapeController extends Controller
 
     }
 
+    // Scrape the articles
     private function scrapeIkeaArticles($req){
         $client = new Client();
         $crawler = $client->request('GET', $req->url);
-
+        // Scrape the article url
         $articles = $this->scrapeIkeaData($crawler);
-        $product_arr = [];
+        // Empty array to store the articles
+        $article_array = [];
+        // Loop over articles
         foreach ($articles as $article) {
-           $product = $this->scrapeIkeaProductData($article->url);
-           $product_arr[] = $product;
+            // fetch the correct details
+           $art = $this->scrapeIkeaProductData($article->url);
+           // Store the details
+           $article_array[] = $art;
         }
-
-        foreach ($product_arr as $item) {
+        // Loop to add to db
+        foreach ($article_array as $item) {
            $exists = Article::where('slug', $item->slug)->count();
            if($exists > 0) continue;
-
+            // Store images
            $image_link = $this->storeImage($item, 'ikea');
-
 
             // Create or add category to db
             $articleEntity = new Article();
@@ -229,10 +254,10 @@ class scrapeController extends Controller
             $articleEntity->save();
        }
 
-       //dd($product_arr);
         return view('scrape.scrape-result')->with(compact('product_arr'));
     }
 
+    // Scrape article URL
     private function scrapeIkeaData($crawler){
         $test = $crawler->filter('.plp-product-list__products .plp-fragment-wrapper .pip-product-compact')->each(function($node){
             $article = new stdClass();
@@ -242,6 +267,7 @@ class scrapeController extends Controller
         return $test;
     }
 
+    // Scrape articles detail
     private function scrapeIkeaProductData($url){
         $client = new Client();
         $crawler = $client->request('GET', $url);
@@ -257,16 +283,17 @@ class scrapeController extends Controller
     }
 
 
-    // P'TIT CHOU
+    //3. P'TIT CHOU
+    // SCrape categories
     private function scrapePtitCategories($url){
         $client = new Client();
         $crawler = $client->request('GET', $url);
-        // #categories_block_left .block_content
+
         $categories = $crawler->filter('.row.products .product--excerpt')
             ->each(function($node){
                 $title = $node->filter('.woocommerce-loop-category__title')->text();
                 $url = $node->filter('a')->attr('href');
-
+                // Store the data in class object
                 $cat = new stdClass();
                 $cat->title = $title;
                 $cat->url = $url;
@@ -274,12 +301,11 @@ class scrapeController extends Controller
                 $cat->store_id = '3';
                 return $cat; 
             });
-
+        // Loop the categories to add to DB
         foreach($categories as $scrapeCategory){
             // Does it yet exist? 
             $exists = Category::where('url', $scrapeCategory->url)->count();
             if($exists > 0) continue;
-
             // Create or add category to db
             $categoryEntity = new Category();
             $categoryEntity->title = $scrapeCategory->title;
@@ -291,21 +317,25 @@ class scrapeController extends Controller
         }
     }
 
+    // SCrape the articles
     private function scrapePtitArticles($req){
         $client = new Client();
         $crawler = $client->request('GET', $req->url);
-
+        // Scrape the url's
         $articles = $this->scrapePtitData($crawler);
-        $product_arr = [];
+        // Empty array to store articles
+        $article_arr = [];
+        // Loop over articles to scrape data
         foreach ($articles as $article) {
+            // Scrape details
             $product = $this->scrapePtitProductData($article->url);
-            $product_arr[] = $product;
+            $article_arr[] = $product;
         }
-        
-        foreach ($product_arr as $item) {
+        // Looop over articles to store in DB
+        foreach ($article_arr as $item) {
             $exists = Article::where('slug', $item->slug)->count();
             if($exists > 0) continue;
-
+            // Store images
             $image_link = $this->storeImage($item, 'ptitchou');
 
             // Create or add category to db
@@ -322,10 +352,9 @@ class scrapeController extends Controller
             $articleEntity->save();
         }
 
-        //dd($product_arr);
         return view('scrape.scrape-result', compact('product_arr'));
     }
-
+    // Scrape the article url
     private function scrapePtitData($crawler){
        return $crawler->filter('.row.products .product--excerpt')->each(function($node){
             $article = new stdClass();
@@ -333,7 +362,7 @@ class scrapeController extends Controller
             return $article;
         });
     }
-
+    // Scrape the article data
     private function scrapePtitProductData($url){
         $client = new Client();
         $crawler = $client->request('GET', $url);
@@ -352,8 +381,9 @@ class scrapeController extends Controller
         return $article;
     }
 
+    // Function to store images
     private function storeImage($item, $store){
-        // Random ID, some pictures have the same name
+        // Random ID, some pictures have the same name (ikea)
         $randomId = rand(0,99999);
         $info = pathinfo($item->img_src);
         $extension = Str::substr($info['extension'], 0, 3);

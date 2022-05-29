@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 
 class ArticleController extends Controller
 {
+    // Get all articles
     public function articles(){
         return view('articles.articles', [
             'articles' => Article::all(),
@@ -19,22 +20,7 @@ class ArticleController extends Controller
         ]);
     }
 
-    public function all(Request $req){
-        $category_id = $req->category;
-
-        $articles = Article::orderBy('price', 'asc')->paginate(20);
-        if($category_id == 0){
-            $articles = Article::orderBy('price', 'asc')->paginate(20);
-        } else {
-            $articles = Article::where('category_id', '=', $category_id)->paginate(20);
-        }
-
-        return view('articles.admin', [
-            'articles' => $articles,
-            'categories' => Category::all(),
-        ]);
-    }
-
+    // Get specific article by ID
     public function getArticle(Request $req){
         $article_id = $req->id;
         $article = Article::find($article_id);
@@ -48,6 +34,7 @@ class ArticleController extends Controller
         ]);
     }
 
+    // Add article to cart for visitor
     public function add(Request $req){
         $article = Article::findOrFail($req->article_id);
 
@@ -63,12 +50,14 @@ class ArticleController extends Controller
         return redirect()->back();
     }
 
+    // Clear the cart
     public function clear(Request $req){
         Cart::session(1)->clear();
         return redirect()->back();
 
     }
 
+    // Delete article from DB
     public function delete(Request $req){
         $article_id = $req->article_id;
         $delete_article = Article::find($article_id)->delete();

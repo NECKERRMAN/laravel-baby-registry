@@ -1,4 +1,4 @@
-@extends('layouts.app');
+@extends('layouts.app')
 
 @section('page-title')
    {{ ucfirst(__('edit registry'))}}
