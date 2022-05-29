@@ -1,6 +1,6 @@
             {{-- GET METHOD so user can see changes --}}
-            <form action="{{ route('registry.addArticles', ['id' => $registry->id])}}" method="GET" class="flex items-end">
-                <div class="flex flex-col">
+            <form action="{{ route('registry.addArticles', ['id' => $registry->id])}}" method="GET" class="overview__form">
+                <div class="overview__cat">
                     <label class="inline-block" for="category">
                         Categories
                     </label>
@@ -11,7 +11,7 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="flex flex-col ml-4">
+                <div class="overview__price">
                     <label for="price">Price range</label>
                     <select name="price" id="price">
                         <option {{ request()->price == 'high-low' ? 'selected' : '' }} value="high-low">Highest first</option>

@@ -9,6 +9,11 @@
     border: 1px solid #9EC4C5;
 }
 
+.card--add{
+    display: flex;
+    align-items: center;
+    justify-content: space-between
+}
 
 
 .article__category{
@@ -101,3 +106,15 @@
     }
   }
 
+
+@media(max-width: 650px){
+  .card--add{
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between
+    }
+
+    .card--add{
+        width: 100%;
+    }
+}

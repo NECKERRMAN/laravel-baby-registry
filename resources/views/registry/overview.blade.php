@@ -13,12 +13,12 @@
                 <a class="link-btn" href="{{ route('registry.addArticles', ['id' => $registry->id ])}}">&#x2B; {{ __('add new articles')}}</a>
             </div>
             <div class="mb-4">
-                <table class="w-full">
+                <table class="w-full overlow-x:auto">
                     <thead>
                         <tr class="text-left">
                             <th width="50" class="py-3">{{ ucfirst(__('image')) }}</th>
                             <th width="250" class="py-3">{{ ucfirst(__('name'))}}</th>
-                            <th width="50" class="py-3">{{ ucfirst(__('price'))}}</th>
+                            <th width="75" class="py-3">{{ ucfirst(__('price'))}}</th>
                             <th width="50" class="py-3">{{ ucfirst(__('status')) }}</th>
                             <th width="200" class="py-3">{{ ucfirst(__('ordered_by')) }}</th>
                             <th width="50" class="py-3">{{ ucfirst(__('action')) }}</th>
@@ -26,7 +26,7 @@
                     </thead>
                     <tbody>
                         @foreach ($articles as $article)
-                            @include('registry.overview-item', ['registry_id' => $registry->id])
+                            @include('partials.overview-item', ['registry_id' => $registry->id])
                         @endforeach
                     </tbody>
                 </table>

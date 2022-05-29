@@ -7,23 +7,23 @@
             <div class="flex items-center mb-8">
                 <p class="text-sm">Let's add some articles</p>
             </div>
-            <div class="flex mt-4">
-                <aside class="mr-4 w-1/5">
+            <div class="overview__main mt-4">
+                <aside>
                     <h3>{{ucfirst(__('current articles')) }}</h3>
                     <ul class="registry-list-added">
                         @foreach ($current_articles as $article)
                             <li>{{ $article['name'] }}</li>
                         @endforeach 
                     </ul>
-                    <a href="{{ route('registry.overview', ['id' => $registry->id])}}" class="link-btn">{{__('overview')}}</a>
+                    <a href="{{ route('registry.overview', ['id' => $registry->id])}}" class="overview__btn link-btn my-2">{{__('overview')}}</a>
                 </aside>
-                <div class=" w-4/5">
+                <div class="overview__items">
                     @include('partials.articles-filter')
 
                     @if($errors->any())
                         <p class="mt-4 text-red-500">{{$errors->first()}}</p>
                     @endif
-                    <div class="grid md:grid-cols-4 sm:grid-cols-2 lg:gird-cols-4 gap-4 mt-4">
+                    <div class="grid md:grid-cols-4 grid-cols-2 sm:grid-cols-2 lg:gird-cols-4 gap-4 mt-4">
                         @foreach ($articles as $article)
                             @include('articles.add', ['reg_id' => $registry->id, 'id_array' => $id_array ])
                         @endforeach

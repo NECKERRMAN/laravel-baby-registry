@@ -172,7 +172,8 @@ class RegistryController extends Controller
         $articles[] = [
             'id' => $new_article->id,
             'name' => $new_article->title,
-            'status' => 0
+            'status' => 0,
+            "ordered_by" => '-'
         ];
 
         $current_registry->articles = $articles;

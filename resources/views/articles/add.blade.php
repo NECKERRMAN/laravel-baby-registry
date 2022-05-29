@@ -4,7 +4,7 @@
     </div>
     <div class="card__content rounded-md m-1">
         <p class="card__title">{{ $article->title }}</p>
-        <div class="flex justify-between items-center">
+        <div class="card--add">
             <p>€ {{ sprintf("%.2f", $article->price) }}</p>
             @if (in_array($article->id, $id_array))
             <p class="py-2 px-4  rounded bg-green-100">{{ ucfirst(__('added')) }}</p>  
