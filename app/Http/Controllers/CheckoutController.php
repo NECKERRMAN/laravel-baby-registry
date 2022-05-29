@@ -38,7 +38,7 @@ class CheckoutController extends Controller
         $order->articles = $articles;
 
         // Update the registry
-        $this->setStatus($req->registry_id, $articles);
+        $this->setStatus($req->registry_id, $articles, $req->name);
 
         // Save order in DB
         $order->save();
@@ -79,7 +79,7 @@ class CheckoutController extends Controller
         return view('pages.succes', ['name' => $req->order_from]);
     }
 
-    private function setStatus($registry_id, $order){
+    private function setStatus($registry_id, $order, $customer){
         $registry = Registry::findOrFail($registry_id);
 
         $articles = $registry->articles;
@@ -87,6 +87,7 @@ class CheckoutController extends Controller
         foreach($articles as $key => $value){
             if(in_array($value['id'], $order)){
                 $articles[$key]['status'] = 1;
+                $articles[$key]['ordered_by'] = $customer;
             }
         }
 

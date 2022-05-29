@@ -6,7 +6,7 @@
             <a class="link-btn float-right" href="{{ url()->previous()}}">{{__('back')}}</a>
             <p class="article__name">{{ $article->title }}</p>
             <p class="article__category">{{ ucfirst(__('articles'))}} > {{ $category->title }}</p>
-            <div class="flex">
+            <div class="flex flex-col md:flex-row">
                 <div class="article__img">
                     <img src="/storage/{{ $article->img_int }}" alt="{{ $article->title }}" class="rounded">
                 </div>

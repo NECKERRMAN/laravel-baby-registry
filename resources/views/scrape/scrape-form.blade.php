@@ -1,12 +1,16 @@
 @extends('layouts.app')
 
+@section('page-title')
+{{ ucfirst(__('scrape data'))}}
+@endsection
+
 @section('content')
     
 <div class="page-wrapper">
     <div class="row py-5">
         <div class="col-sm-8 offset-sm-2">
-            <h1>Scrape data</h1>
-            <h2>1. Select correct store and enter category url</h2>
+            <h1>{{ ucfirst(__('scrape data'))}}</h1>
+            <h2>{{ ucfirst(__('select_store'))}}</h2>
             
             <form action="{{ route('scrape.categories')}}" method="post">
                 @csrf
@@ -25,18 +29,18 @@
                 <div class="py-2 w-full">
                     <div class="w-1/2">
                         <label class="block" for="url">
-                            Collection URL (corresponding to webshop!)
+                           {{ ucfirst(__('collection_url'))}}
                         </label>
                         <input class="w-full rounded border-[#9EC4C5] border-1" type="url" name="url" id="url" placeholder="e.g. https://babyenco.be/nl/baby-s-feestmaaltijd">
                     </div>
                 </div>
                 <div class="form-group">
                     <button type="submit" class="link-btn">
-                        Scrape Categories!
+                        {{ ucfirst(__('scrape categories'))}}
                     </button>
                 </div>
             </form>
-            <h2>2. Scrape articles</h2>
+            <h2>2. {{ ucfirst(__('scrape articles'))}}</h2>
             <table class="mx-0 my-2 w-full">
                 @foreach ($allCategories as $category)
                 <tr class="bg-[#9ec4c526] border-2">
@@ -49,7 +53,7 @@
                             <input type="hidden" name="category_id" value="{{ $category->id }}">
                             <input type="hidden" name="url" value="{{ $category->url}}">
                             <input type="hidden" name="shop" value="{{ $category->store_name }}">
-                            <button type="submit" class="link-btn w-full">Scrape all articles</button>
+                            <button type="submit" class="link-btn w-full">{{ ucfirst(__('scrape all articles'))}}</button>
                         </form>
                     </td>
                 </tr>

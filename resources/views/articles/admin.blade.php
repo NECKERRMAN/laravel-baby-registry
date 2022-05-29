@@ -7,7 +7,7 @@
 @section('content')
     <div class="page-wrapper">
         <div class="flex my-4">
-            <form method="get" class="category__select flex flex-col items-start mr-8">
+            <form method="get" class="flex flex-col items-start">
                 <label for="category" class="my-2">Categorie:</label>
                 <div class="flex items-center">
                     <select name="category" id="category" class="rounded-md">
@@ -21,7 +21,7 @@
             </form>
         </div>
 
-        <div class="grid md:grid-cols-4 sm:grid-cols-2 gap-4">
+        <div class="grid md:grid-cols-3 lg:grid-cols-4 sm:grid-cols-2 gap-4">
             @foreach ($articles as $article)
                 @include('articles.admin-card')
             @endforeach

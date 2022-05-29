@@ -197,11 +197,12 @@ class RegistryController extends Controller
         foreach($registry_articles as $article){
             $art = Article::find($article['id']);
 
-            $articles[] = [$art, 'status' => $article['status']];
+            $articles[] = [$art, 'status' => $article['status'], 'ordered_by' => $article['ordered_by']];
             if($article['status'] === 1 ){
                 $total += $art->price;
             }
         }
+
 
         return view('registry.overview', [
                 'registry' => $registry,

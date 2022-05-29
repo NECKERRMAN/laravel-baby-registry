@@ -19,9 +19,9 @@
                             <th width="50" class="py-3">{{ ucfirst(__('image')) }}</th>
                             <th width="250" class="py-3">{{ ucfirst(__('name'))}}</th>
                             <th width="50" class="py-3">{{ ucfirst(__('price'))}}</th>
-                            <th width="200" class="py-3">{{ ucfirst(__('category')) }}</th>
-                            <th width="50" class="py-3">{{ ucfirst(__('action')) }}</th>
                             <th width="50" class="py-3">{{ ucfirst(__('status')) }}</th>
+                            <th width="200" class="py-3">{{ ucfirst(__('ordered_by')) }}</th>
+                            <th width="50" class="py-3">{{ ucfirst(__('action')) }}</th>
                         </tr>
                     </thead>
                     <tbody>
