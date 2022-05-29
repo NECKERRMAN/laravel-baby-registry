@@ -47,17 +47,16 @@ Route::group(['prefix' => 'registry', 'middleware' => 'auth'], function() {
     Route::get('edit/{id}', [RegistryController::class, 'editRegistry'])->name('registry.edit');
 });
 
-// Unsecured registry routes
-Route::group(['prefix' => 'registry'], function() {
-    Route::get('{slug}', [RegistryController::class, 'locked'])->name('locked');
-    Route::post('{slug}', [RegistryController::class, 'unlocked'])->name('unlocked');
-});
-
 // Articles
 Route::get('/articles', [ArticleController::class, 'articles'])->name('articles.articles');
 Route::get('/articles/article/{id}', [ArticleController::class, 'getArticle'])->name('articles.article');
 
 // VISITOR
+// Unsecured registry routes
+Route::group(['prefix' => 'registry'], function() {
+    Route::get('/{slug}', [RegistryController::class, 'locked'])->name('locked');
+    Route::post('/{slug}', [RegistryController::class, 'unlocked'])->name('unlocked');
+});
 Route::post('/visitor/add-article', [ArticleController::class, 'add'])->name('visitor.add');
 Route::post('/visitor/clear-cart', [ArticleController::class, 'clear'])->name('visitor.clear');
 Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout');

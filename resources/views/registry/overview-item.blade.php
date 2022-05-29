@@ -1,6 +1,7 @@
 <tr class="m-4">
-    <td><img src="{{ $article[0]->img_src }}" class="w-10 h-10" alt="{{ $article[0]->title }}"></td>
+    <td><img src="/storage/{{ $article[0]->img_int }}" class="w-10 h-10" alt="{{ $article[0]->title }}"></td>
     <td>{{ $article[0]->title }}</td>
+    <td>€ {{ sprintf("%.2f", $article[0]->price) }}</td>
     <td>{{ $article[0]->category->title }}</td>
     <td>
         {{-- IF item is not bought -> can be deleted --}}

@@ -5,6 +5,8 @@
         </div>
         <div class="card__content rounded-md m-1">
             <p class="card__title">{{ $article[0]->title }}</p>
+            <p>{{ $article[0]->store->name }}</p>
+            <a class="underline" href="{{ $article[0]->slug }}" target="_blank" rel="noreferrer noopener">{{ ucfirst(__('website'))}}</a>
             <div class="flex justify-between items-center">
                 <p>€ {{ sprintf("%.2f", $article[0]->price) }}</p>
                     @if (!in_array($article[0]->id, $check_array))

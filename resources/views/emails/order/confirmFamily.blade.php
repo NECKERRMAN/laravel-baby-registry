@@ -1,8 +1,9 @@
 @component('mail::message')
-# Introduction
+# {{ ucfirst(__('thanks_order'))}}
 
 Your order with id #{{ $order->id}} has been created!
 
-Thanks,<br>
+{{ucfirst(__('greetings'))}}
+<br>
 {{ config('app.name') }}
 @endcomponent

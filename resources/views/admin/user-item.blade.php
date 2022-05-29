@@ -1,4 +1,4 @@
-<ul class="flex items-center border-[#9EC4C5] border-2 my-2 p-2">
+<ul class="flex items-center border-[#9EC4C5] rounded border-2 my-2 p-2">
     <li class="mr-4 flex-1">
         @if (Auth::user()->id === $user->id)
         <div class="flex items-center">

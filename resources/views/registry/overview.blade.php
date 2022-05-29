@@ -17,7 +17,8 @@
                     <thead>
                         <tr class="text-left">
                             <th width="50" class="py-3">{{ ucfirst(__('image')) }}</th>
-                            <th width="400" class="py-3">{{ ucfirst(__('name'))}}</th>
+                            <th width="250" class="py-3">{{ ucfirst(__('name'))}}</th>
+                            <th width="50" class="py-3">{{ ucfirst(__('price'))}}</th>
                             <th width="200" class="py-3">{{ ucfirst(__('category')) }}</th>
                             <th width="50" class="py-3">{{ ucfirst(__('action')) }}</th>
                             <th width="50" class="py-3">{{ ucfirst(__('status')) }}</th>
@@ -29,6 +30,9 @@
                         @endforeach
                     </tbody>
                 </table>
+            </div>
+            <div class="mb-4 py-2 px-4 rounded border-2 border-[#9ec4c5]">
+                {{ strtoupper(__('total purchased'))}}: € {{ sprintf("%.2f", $total) }}
             </div>
             <div class="mb-4"> 
                 <button class="px-4 py-2 rounded border-2 border-[#9ec4c5] text-[#9ec4c5]">Export <i class="fa-solid fa-download"></i></button>

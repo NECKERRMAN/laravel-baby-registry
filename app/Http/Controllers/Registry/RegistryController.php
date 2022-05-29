@@ -193,23 +193,27 @@ class RegistryController extends Controller
         $registry_articles = $registry->articles;
 
         $articles = [];
-
+        $total = 0;
         foreach($registry_articles as $article){
             $art = Article::find($article['id']);
 
             $articles[] = [$art, 'status' => $article['status']];
-
+            if($article['status'] === 1 ){
+                $total += $art->price;
+            }
         }
 
         return view('registry.overview', [
                 'registry' => $registry,
-                'articles' => $articles
+                'articles' => $articles,
+                'total' => $total
         ]);
     }
 
     public function locked(Request $req){
         $reg_slug = $req->slug;
         $registry = Registry::where('slug', '=', $reg_slug)->first();
+        if($registry === null) abort(404);
         $articles = [];
         if($registry !== null){
 

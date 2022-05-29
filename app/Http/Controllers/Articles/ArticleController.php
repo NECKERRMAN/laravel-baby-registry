@@ -21,7 +21,6 @@ class ArticleController extends Controller
 
     public function all(Request $req){
         $category_id = $req->category;
-        dd($req);
 
         $articles = Article::orderBy('price', 'asc')->paginate(20);
         if($category_id == 0){

@@ -15,7 +15,7 @@
                        <li>{{ucfirst(__('name_birthdate'))}}</li>
                        <li>{{ucfirst(__('select_articles'))}}</li>
                        <li>{{ucfirst(__('send_link'))}}</li>
-                       <li class="font-bold">{{ucfirst(__('important_password'))}} <a href="/my-lists" class="underline">{{__('my_lists')}}</a> - {{__('passwords')}}</li>
+                       <li class="font-bold">{{ucfirst(__('important_password'))}} <a href="{{ route('registry.all')}}" class="underline">{{__('my_lists')}}</a> - {{__('passwords')}}</li>
                    </ul>
 
                    <a class="my-2 p-4 rounded border-2" href="{{ route('registry.all')}}">Naar mijn geboortelijst(en)</a>
