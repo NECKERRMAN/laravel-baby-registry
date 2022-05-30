@@ -35,7 +35,7 @@
                 {{ strtoupper(__('total purchased'))}}: € {{ sprintf("%.2f", $total) }}
             </div>
             <div class="mb-4"> 
-                <button class="px-4 py-2 rounded border-2 border-[#9ec4c5] text-[#9ec4c5]">Export <i class="fa-solid fa-download"></i></button>
+                <a href="{{ route('registry.export', ['registry' => $registry->id])}}" class="px-4 py-2 rounded border-2 border-[#9ec4c5] text-[#9ec4c5]">Export <i class="fa-solid fa-download"></i></a>
             </div>
         </div>
     </div>

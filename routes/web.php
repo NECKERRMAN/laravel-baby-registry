@@ -45,6 +45,8 @@ Route::group(['prefix' => 'registry', 'middleware' => 'auth'], function() {
     Route::post('{id}/delete-article', [RegistryController::class, 'deleteRegistryArticle'])->name('registry.deleteArticle');
     Route::post('add-article', [RegistryController::class, 'addArticle'])->name('registry.addOne');
     Route::get('edit/{id}', [RegistryController::class, 'editRegistry'])->name('registry.edit');
+    // Export excel data
+    Route::get('/export/{registry}', [RegistryController::class, 'export'])->name('registry.export');
 });
 
 // Articles

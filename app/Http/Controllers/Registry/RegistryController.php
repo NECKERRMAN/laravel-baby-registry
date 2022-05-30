@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Registry;
 
+use App\Exports\RegistryExport;
 use App\Http\Controllers\Controller;
 use App\Models\Article;
 use App\Models\Category;
@@ -11,6 +12,7 @@ use Darryldecode\Cart\Facades\CartFacade as Cart;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 use stdClass;
 
 use function PHPUnit\Framework\isEmpty;
@@ -228,60 +230,69 @@ class RegistryController extends Controller
     public function locked(Request $req){
         $reg_slug = $req->slug;
         $registry = Registry::where('slug', '=', $reg_slug)->first();
-        if($registry === null) abort(404);
-        $articles = [];
-        if($registry !== null){
 
-            $registry_articles = $registry->articles;
-            foreach($registry_articles as $article){
-                $art = Article::find($article['id']);
-                $articles[] = [$art, 'status' => $article['status']];
-            }
-        }
-
-        $cart = Cart::session(1);
-        $cart_array = [];
-        foreach($cart->getContent() as $key => $value){
-            $cart_array[] = $key;
-        }
-
-        return view('registry.visitor', [
-                'registry' => $registry,
-                'articles' => $articles,
-                'cart_array' => $cart_array,
-                'cart' => $cart
-        ]);
-    }
-    
-    public function unlocked(Request $req){
-        $reg_slug = $req->slug;
-        $registry = Registry::where('slug', '=', $reg_slug)->first();
-
-        if($req->secret_password === $registry->password){
-            $reg_slug = $req->slug;
-            $registry = Registry::where('slug', '=', $reg_slug)->first();
+        if($req->session()->get('unlocked') == $registry->id ){
+            if($registry === null) abort(404);
             $articles = [];
             if($registry !== null){
-    
+
                 $registry_articles = $registry->articles;
                 foreach($registry_articles as $article){
                     $art = Article::find($article['id']);
                     $articles[] = [$art, 'status' => $article['status']];
                 }
             }
-    
+
             $cart = Cart::session(1);
             $cart_array = [];
             foreach($cart->getContent() as $key => $value){
                 $cart_array[] = $key;
             }
-    
+
             return view('registry.visitor', [
                     'registry' => $registry,
                     'articles' => $articles,
                     'cart_array' => $cart_array,
                     'cart' => $cart
             ]);
+        }
+        
+        return view('registry.locked')->with(compact('registry'));
+    }
+    
+    public function unlocked(Request $req){
+/*         $reg_slug = $req->slug;
+        $registry = Registry::where('slug', '=', $reg_slug)->first(); */
+
+        $registry = Registry::findOrFail($req->reg_id);
+
+        if($req->secret_password === $registry->password){
+            session(['unlocked' => $req->reg_id]);
+            if($registry === null) abort(404);
+            $articles = [];
+            if($registry !== null){
+
+                $registry_articles = $registry->articles;
+                foreach($registry_articles as $article){
+                    $art = Article::find($article['id']);
+                    $articles[] = [$art, 'status' => $article['status']];
+                }
+            }
+
+            $cart = Cart::session(1);
+            $cart_array = [];
+            foreach($cart->getContent() as $key => $value){
+                $cart_array[] = $key;
+            }
+
+            return view('registry.visitor', [
+                    'registry' => $registry,
+                    'articles' => $articles,
+                    'cart_array' => $cart_array,
+                    'cart' => $cart
+            ]);
+        } else {
+            return redirect()->back();
         }
     }
 
@@ -317,18 +328,19 @@ class RegistryController extends Controller
         $registry->save();
         // Get the updated array for the view
         $updated = [];
-
         foreach($current_articles as $article){
             $art = Article::find($article['id']);
-
             $updated[] = [$art, 'status' => $article['status']];
-
         }
 
         return view('registry.overview', [
             'registry' => $registry,
             'articles' => $updated
         ]);
+    }
 
+    public function export(Request $req){
+        $registry = Registry::findOrFail($req->registry);
+        return Excel::download(new RegistryExport($registry), $registry->name . '.xlsx');
     }
 }
