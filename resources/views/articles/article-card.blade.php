@@ -1,7 +1,7 @@
 @if ($article['status'] !== 1)
     <div class="card rounded-md justify-between">
         <div class="card__img m-1">
-            <img src="{{ $article[0]->img_src }}" alt="product-img" class="rounded-md">
+            <img src="/storage/{{ $article[0]->img_int }}" alt="product-img" class="rounded-md">
         </div>
         <div class="card__content rounded-md m-1">
             <p class="card__title">{{ $article[0]->title }}</p>

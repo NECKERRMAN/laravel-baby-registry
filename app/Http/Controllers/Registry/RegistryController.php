@@ -226,23 +226,28 @@ class RegistryController extends Controller
         ]);
     }
 
-
+    // Function for registry visitor
     public function locked(Request $req){
+        // Get correct registry
         $reg_slug = $req->slug;
         $registry = Registry::where('slug', '=', $reg_slug)->first();
 
+        // Check if registry is already unlcoked with session
         if($req->session()->get('unlocked') == $registry->id ){
+            // Full block incase registry doesn't exist
             if($registry === null) abort(404);
+            // Emptry array for articles
             $articles = [];
             if($registry !== null){
-
+                // Get registry articles
                 $registry_articles = $registry->articles;
                 foreach($registry_articles as $article){
                     $art = Article::find($article['id']);
+                    // Add status to articles to check if already bought
                     $articles[] = [$art, 'status' => $article['status']];
                 }
             }
-
+            // Initiate cart
             $cart = Cart::session(1);
             $cart_array = [];
             foreach($cart->getContent() as $key => $value){
@@ -261,24 +266,25 @@ class RegistryController extends Controller
     }
     
     public function unlocked(Request $req){
-/*         $reg_slug = $req->slug;
-        $registry = Registry::where('slug', '=', $reg_slug)->first(); */
-
+        // Find registry from form
         $registry = Registry::findOrFail($req->reg_id);
-
+        // Check password
         if($req->secret_password === $registry->password){
+            // Add correct id to session
             session(['unlocked' => $req->reg_id]);
             if($registry === null) abort(404);
+            // Empty array to fill articles
             $articles = [];
-            if($registry !== null){
-
+            if($registry !== null){ 
+                // Fill articles with article and article status
                 $registry_articles = $registry->articles;
                 foreach($registry_articles as $article){
                     $art = Article::find($article['id']);
+                    // Status to check if already bougt
                     $articles[] = [$art, 'status' => $article['status']];
                 }
             }
-
+            //Initiate Cart
             $cart = Cart::session(1);
             $cart_array = [];
             foreach($cart->getContent() as $key => $value){
@@ -338,8 +344,9 @@ class RegistryController extends Controller
             'articles' => $updated
         ]);
     }
-
+    // Export requested registry data (articles, who bought, store, price)
     public function export(Request $req){
+        // Find correct registry
         $registry = Registry::findOrFail($req->registry);
         return Excel::download(new RegistryExport($registry), $registry->name . '.xlsx');
     }
