@@ -59,6 +59,7 @@ Route::group(['prefix' => 'registry'], function() {
     Route::get('/{slug}', [RegistryController::class, 'locked'])->name('locked');
     Route::post('/{slug}', [RegistryController::class, 'unlocked'])->name('unlocked');
 });
+
 Route::post('/visitor/add-article', [ArticleController::class, 'add'])->name('visitor.add');
 Route::post('/visitor/clear-cart', [ArticleController::class, 'clear'])->name('visitor.clear');
 Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout');

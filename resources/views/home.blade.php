@@ -6,7 +6,7 @@
 
 @section('content')
 <div class="banner">
-  <p class="banner__title">{{ ucfirst(__('callout'))}}</p>
+  <p class="banner__title">{{ ucfirst(__('callout'))}} test</p>
   <p class="banner__subtitle">{{ ucfirst(__('callout_question'))}}</p>
   <div class="banner__img">
     <img src="/images/storksie-logo.png" alt="storksie-logo" class="w-20 h-20">
