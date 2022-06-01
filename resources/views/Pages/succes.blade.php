@@ -3,6 +3,6 @@
 @section('content')
 <div>
     <h1 class="my-4 text-center">Bedankt {{$name}}</h1>
-    <p class="text-center">We hebben jouw betaling goed ontvangen, je kan deze pagina nu sluiten!</p>
+    <p class="text-center">{{ ucfirst(__('order_received'))}}</p>
 </div>
 @endsection
