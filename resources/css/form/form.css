@@ -8,7 +8,10 @@
     border: 1px solid #9EC4C5;
 }
 
-input[type="text"]{
+input[type="text"],
+input[type="email"]
+{
+    width: 100%;
     border-radius: 5px;
     border: 1px solid #9EC4C5;
 }
