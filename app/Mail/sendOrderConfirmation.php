@@ -31,7 +31,9 @@ class sendOrderConfirmation extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.order.confirmFamily', [
+        return $this
+        ->subject(ucfirst(__('order_confirmation')))
+        ->markdown('emails.order.confirmFamily', [
             'order' => $this->order
         ]);
     }

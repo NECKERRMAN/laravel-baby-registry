@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\sendNewProductMail;
 use App\Mail\sendOrderConfirmation;
 use App\Models\Order;
 use App\Models\Registry;
+use App\Models\User;
 use Darryldecode\Cart\Facades\CartFacade as Cart;
 use Mollie\Laravel\Facades\Mollie;
 use Illuminate\Http\Request;
@@ -41,8 +43,11 @@ class CheckoutController extends Controller
 
         // Save order in DB
         $order->save();
-        // Send email to user
+        // Send email to customer
         Mail::to($req->email)->send(new sendOrderConfirmation($order));
+        // Send email to registry owner
+        Mail::to($this->userEmail($req->registry_id))->send(new sendNewProductMail($req->name, $req->message, $total));
+
         // Webhook logic, accessible from online env
         $webhookUrl = route('webhooks.mollie');
 
@@ -77,6 +82,12 @@ class CheckoutController extends Controller
     // Return succes page
     public function succes(Request $req){
         return view('pages.succes', ['name' => $req->order_from]);
+    }
+
+    private function userEmail($registry_id){
+        $registry = Registry::findOrFail($registry_id);
+        $user = User::findOrFail($registry->user_id);
+        return $user->email;
     }
     
     // Update the registry with status and customer

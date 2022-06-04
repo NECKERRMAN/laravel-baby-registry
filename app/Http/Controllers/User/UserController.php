@@ -13,12 +13,11 @@ class UserController extends Controller
     // See current user details
     public function showUserDetails(){
         $user = Auth::user();
-        dd($user);
     }
 
     // User can delete own registries
     public function deleteRegistry(Request $req){
-
+        // Find user's registry
         $registry = Registry::find($req->registry_id);
 
         // Extra safety, check if current user can delete
