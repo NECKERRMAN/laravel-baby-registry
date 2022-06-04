@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('page-title')
-    Dashboard
+{{ ucfirst(__('dashboard'))}}
 @endsection
 
 @section('content')
@@ -18,7 +18,7 @@
                        <li class="font-bold">{{ucfirst(__('important_password'))}} <a href="{{ route('registry.all')}}" class="underline">{{__('my_lists')}}</a> - {{__('passwords')}}</li>
                    </ul>
 
-                   <a class="my-2 p-4 rounded border-2" href="{{ route('registry.all')}}">Naar mijn geboortelijst(en)</a>
+                   <a class="my-2 p-4 rounded border-2" href="{{ route('registry.all')}}">{{ ucfirst(__('to my lists'))}}</a>
                 </div>
             </div>
         </div>

@@ -17,7 +17,7 @@
             </select>
             </div>
             <div class="filter__select">
-                <label for="filter">Filter</label>
+                <label for="filter">{{ ucfirst(__('filter'))}}</label>
             </div>
         </div>
 

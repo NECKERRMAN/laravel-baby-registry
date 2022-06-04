@@ -11,6 +11,7 @@
     </li>
     <li>
         @if (Auth::user()->id !== $user->id)
+        {{-- TO DO --}}
        <form action="#" method="post">
            @csrf
            <input type="hidden" name="user_id" value="{{ $user->id }}">

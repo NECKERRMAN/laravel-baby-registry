@@ -20,7 +20,7 @@
                             <tr class="text-left">
                                 <th width="200" class="py-3">{{ __('name')}}</th>
                                 <th width="400" class="py-3">{{ __('link_ff')}}</th>
-                                <th width="200" class="py-3">actie</th>
+                                <th width="200" class="py-3">{{ __('Action')}}</th>
                             </tr>
                         </thead>
                         <tbody>

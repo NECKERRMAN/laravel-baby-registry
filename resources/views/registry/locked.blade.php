@@ -15,7 +15,7 @@
             @csrf
             <input type="hidden" name="reg_id" value="{{ $registry->id}}">
             <input type="password" name="secret_password" id="secret_password">
-            <button class="border rounded py-2 px-4 mt-2 border-green-800 text-green-800 uppercase" type="submit">Enter</button>
+            <button class="border rounded py-2 px-4 mt-2 border-green-800 text-green-800 uppercase" type="submit">{{ ucfirst(__('enter'))}}</button>
         </form>
     </div>
 @endsection

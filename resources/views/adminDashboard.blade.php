@@ -1,18 +1,18 @@
 @extends('layouts.app')
 
 @section('header')
-    <h1>{{ ucfirst(__('welcome_back'))}} ADMIN</h1>
+    <h1>{{ ucfirst(__('welcome_back'))}} {{strtoupper(__('admin'))}}</h1>
 @endsection
 
 @section('page-title')
-    Admin Dashboard
+    {{ucfirst(__('admin dashboard'))}}
 @endsection
 
 @section('content')
     <div class="page-wrapper py-12">
         <div class="admin-dashboard">
             <div class="admin-dashboard__title mb-4">
-                <p>Admin dashboard</p>
+                <p>{{ucfirst(__('admin dashboard'))}}</p>
             </div>
             <div class="admin-dashboard__overview">
                 <div>
@@ -26,31 +26,31 @@
                 <a class="admin-dashboard__btn" href="{{ route('admin.scrape') }}">
                     <div>
                         <i class="fa-solid fa-magnifying-glass-arrow-right"></i>
-                        <p>Scraper</p>
+                        <p>{{ ucfirst(__('scraper'))}}</p>
                     </div>
                 </a>
                 <a class="admin-dashboard__btn" href="{{ route('admin.categories') }}">
                     <div>
                         <i class="fa-solid fa-certificate"></i>
-                        <p>All Categories</p>
+                        <p>{{ ucfirst(__('all categories'))}}</p>
                     </div>
                 </a>
                 <a class="admin-dashboard__btn" href="{{ route('admin.articles') }}">
                     <div>
                         <i class="fa-solid fa-basket-shopping"></i>
-                        <p>All Products</p>
+                        <p>{{ ucfirst(__('all articles'))}}</p>
                     </div>
                 </a>
                 <a class="admin-dashboard__btn" href="{{ route('admin.registries') }}">
                     <div>
                         <i class="fa-solid fa-list-ul"></i>
-                        <p>All Registries</p>
+                        <p>{{ ucfirst(__('all registries'))}}</p>
                     </div>
                 </a>
                 <a class="admin-dashboard__btn" href="{{ route('admin.users') }}">
                     <div>
                         <i class="fa-solid fa-users"></i>
-                        <p>All Users</p>
+                        <p>{{ ucfirst(__('all users'))}}</p>
                     </div>
                 </a>
             </div>

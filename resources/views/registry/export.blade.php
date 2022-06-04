@@ -14,7 +14,7 @@
             <td>{{ $article[0]->title }}</td>
             <td>{{ $article[0]->product_code }}</td>
             <td>{{ $article[0]->store->name }}</td>
-            <td>{{ sprintf("%.2f", $article[0]->price) }} EUR</td>
+            <td>{{ sprintf("%.2f", $article[0]->price) }} {{ __('val_curr')}}</td>
             <td>{{ $article['ordered_by'] }}</td>
         </tr>
         @endforeach
@@ -22,7 +22,7 @@
             <td>{{ ucfirst(__('total ordered'))}}:</td>
             <td></td>
             <td></td>
-            <td>{{ sprintf("%.2f", $total) }} EUR</td>
+            <td>{{ sprintf("%.2f", $total) }} {{ __('val_curr')}}</td>
         </tr>
     </tbody>
 </table>

@@ -5,7 +5,7 @@
         <h1 class="text-center">{{ucfirst($registry->name)}}</h1>
         <div>
             <div class="flex items-center mb-8">
-                <p class="text-sm">Let's add some articles</p>
+                <p class="text-sm">{{ ucfirst(__('add_article_subtitle'))}}</p>
             </div>
             <div class="overview__main mt-4">
                 <aside>

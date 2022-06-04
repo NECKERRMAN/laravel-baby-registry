@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
 @section('page-title')
-    {{ ucfirst(__('Admin | All users'))}}
+    {{ ucfirst(__('all users'))}}
 @endsection
 
 @section('content')
     <div class="page-wrapper">
-        <h1>All users</h1>
+        <h1>{{ucfirst(__('all users'))}}</h1>
         <ul>
             <li>
                 @foreach ($users as $user)
