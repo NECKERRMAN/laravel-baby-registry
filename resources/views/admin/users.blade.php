@@ -10,7 +10,7 @@
         <ul>
             <li>
                 @foreach ($users as $user)
-                    @include('admin.user-item')
+                    @include('partials.user-item')
                 @endforeach
             </li>
         </ul>

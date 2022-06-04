@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="page-wrapper">
-        <div class="article">
+        <div class="article mb-4">
             <a class="link-btn float-right" href="{{ url()->previous()}}">{{__('back')}}</a>
             <p class="article__name">{{ $article->title }}</p>
             <p class="article__category">{{ ucfirst(__('articles'))}} > {{ $category->title }}</p>

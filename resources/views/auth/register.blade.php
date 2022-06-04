@@ -45,14 +45,17 @@
                                 name="password_confirmation" required />
             </div>
 
-            <div class="flex items-center justify-end mt-4">
-                <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('login') }}">
-                    {{ __('Already registered?') }}
-                </a>
-
-                <x-button class="ml-4">
-                    {{ __('Register') }}
-                </x-button>
+            <div class="flex items-center justify-between mt-4">
+                <a class="rounded bg-[#9EC4C5] text-white py-2 px-4" href="/">{{ ucfirst(__('back'))}}</a>
+                <div>
+                    <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('login') }}">
+                        {{ __('Already registered?') }}
+                    </a>
+                    
+                    <x-button class="ml-4">
+                        {{ __('Register') }}
+                    </x-button>
+                </div>
             </div>
         </form>
     </x-auth-card>

@@ -77,6 +77,7 @@ Route::group(['middleware' => ['auth', 'role:admin']], function(){
     Route::get('/admin/registries', [AdminController::class, 'registries'])->name('admin.registries');
     Route::get('/admin/categories', [AdminController::class, 'categories'])->name('admin.categories');
     Route::post('/admin/articles', [ArticleController::class, 'delete'])->name('admin.deleteArticle');
+    Route::post('/admin/users', [AdminController::class, 'delete'])->name('admin.deleteUser');
 });
 
 require __DIR__.'/auth.php';

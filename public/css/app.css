@@ -708,6 +708,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 }.bg-gray-800{
   --tw-bg-opacity: 1;
   background-color: rgb(31 41 55 / var(--tw-bg-opacity));
+}.bg-\[\#9EC4C5\]{
+  --tw-bg-opacity: 1;
+  background-color: rgb(158 196 197 / var(--tw-bg-opacity));
 }.bg-\[\#9ec4c526\]{
   background-color: #9ec4c526;
 }.bg-gray-100{
@@ -717,9 +720,6 @@ Ensure the default browser behavior of the `hidden` attribute.
   --tw-bg-opacity: 1;
   background-color: rgb(248 113 113 / var(--tw-bg-opacity));
 }.bg-\[\#9ec4c5\]{
-  --tw-bg-opacity: 1;
-  background-color: rgb(158 196 197 / var(--tw-bg-opacity));
-}.bg-\[\#9EC4C5\]{
   --tw-bg-opacity: 1;
   background-color: rgb(158 196 197 / var(--tw-bg-opacity));
 }.fill-current{

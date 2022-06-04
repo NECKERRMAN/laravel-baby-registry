@@ -11,8 +11,7 @@
     </li>
     <li>
         @if (Auth::user()->id !== $user->id)
-        {{-- TO DO --}}
-       <form action="#" method="post">
+       <form action="{{ route('admin.deleteUser')}}" method="post">
            @csrf
            <input type="hidden" name="user_id" value="{{ $user->id }}">
            <button class="py-2 px-4 border-red-500 border-2 rounded text-red-500" type="submit">{{ __('delete')}}</button>

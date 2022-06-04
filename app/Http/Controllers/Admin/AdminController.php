@@ -44,6 +44,13 @@ class AdminController extends Controller
         return view('admin.users')->with(compact('users'));
     }
 
+    // Delete user
+    public function delete(Request $req){
+        $user = $req->user_id;
+        $delete = User::find($user)->delete();
+        return redirect()->back();
+    }
+
     // All categories
     public function categories(){
         $categories = Category::all();

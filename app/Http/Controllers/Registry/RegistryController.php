@@ -120,7 +120,7 @@ class RegistryController extends Controller
         };
 
         // Filters based on get
-        if($req->price && $req->category){
+        if($req->price || $req->category){
                 // Filter on category
             if($req->category !== '0'){
                 $category_id = $req->category;
