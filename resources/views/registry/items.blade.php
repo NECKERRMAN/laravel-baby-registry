@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('page-title')
+    {{ ucfirst(__('all articles'))}}
+@endsection
+
 @section('content')
     <div class="page-wrapper">
         <h1 class="text-center">{{ucfirst($registry->name)}}</h1>
