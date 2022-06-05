@@ -30,6 +30,8 @@ This application is created by
   git clone git@github.com:gdmgent-webdev2/werkstuk---geboortelijst-NECKERRMAN.git
   ```
 
+* Cd into /werkstuk---geboortelijst-NECKERRMAN.git
+
 * Run composer install on your terminal
 
 * Copy .env.example file to .env on the root folder and fill in correct details
