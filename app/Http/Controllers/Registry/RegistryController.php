@@ -332,16 +332,24 @@ class RegistryController extends Controller
 
         $registry->updated_at = $current_time->toDateTimeString();
         $registry->save();
+
+         // Total price set to 0
+         $total = 0;
         // Get the updated array for the view
         $updated = [];
         foreach($current_articles as $article){
             $art = Article::find($article['id']);
-            $updated[] = [$art, 'status' => $article['status']];
+            $updated[] = [$art, 'status' => $article['status'], 'ordered_by' => $article['ordered_by']];
+            // Update total price
+            if($article['status'] === 1 ){
+            $total += $art->price;
+            }
         }
 
         return view('registry.overview', [
             'registry' => $registry,
-            'articles' => $updated
+            'articles' => $updated,
+            'total' => $total
         ]);
     }
     // Export requested registry data (articles, who bought, store, price)
