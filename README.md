@@ -33,7 +33,7 @@ This application is created by
 
 * Clone this repo
   ```
-  git clone git@github.com:gdmgent-webdev2/werkstuk---geboortelijst-NECKERRMAN.git
+  git clone git@github.com:NECKERRMAN/laravel-baby-registry.git
   ```
 
 * Cd into /werkstuk---geboortelijst-NECKERRMAN.git
@@ -44,6 +44,7 @@ This application is created by
 
 * Run the following commands:
   ```
+    - composer install
     - php artisan key:generate
     - npm install && npm run dev
     - php artisan migrate
