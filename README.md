@@ -15,16 +15,14 @@ This application is created by
 ------------------------------------------------------------------------------------------
 
 ## Link
-  ```
-  https://storksie.be/
-  ```
 
+ Not longer maintained and deployed.
 
 ## How to use Storksie? 
 
 1. Create an account
-2. Create a registry with a TOP SECRET password
-3. Add the articles you want
+2. Create a registry with a suitable password (this password will give others access to your registry)
+3. Add the articles you would like to receive
 4. Send the registry link (along with your chosen TOP SECRET password) to friends and/or family
 5. Wait for the first email that an item has been bought!
 
@@ -36,9 +34,7 @@ This application is created by
   git clone git@github.com:NECKERRMAN/laravel-baby-registry.git
   ```
 
-* Cd into /werkstuk---geboortelijst-NECKERRMAN.git
-
-* Run composer install on your terminal
+* Cd into /laravel-baby-registry
 
 * Copy .env.example file to .env on the root folder and fill in correct details
 
